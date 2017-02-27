@@ -42,11 +42,18 @@ class Plugin extends \App\Plugin\Iface
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
 
+        $config = \Tk\Config::getInstance();
+
+        // Setup the adapter, this should be selectable from the settings if needed?
+        $adapters = $config['system.auth.adapters'];
+        $adapters = array_merge(array('LDAP' => '\Ldap\Auth\UnimelbAdapter'), $adapters);
+        $config['system.auth.adapters'] = $adapters;
+
         $this->getPluginFactory()->registerInstitutionPlugin($this);
 
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
-        //$dispatcher->addSubscriber(new \Ldap\Listener\ExampleHandler());
+        $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
 
     }
     
