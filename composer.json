@@ -1,0 +1,34 @@
+{
+  "name": "ems-plg/ldap",
+  "type": "ttek-plugin",
+  "description": "LDAP Plugin for the EMS III",
+  "keywords": [
+    "tropotek",
+    "plugin",
+    "EMS III",
+    "ldap"
+  ],
+  "homepage": "http://www.tropotek.com/",
+  "time": "2017-02-01",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Michael Mifsud",
+      "homepage": "http://www.tropotek.com/"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Ldap\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  },
+  "require": {
+    "ttek/tk-installers": "~2.0"
+  }
+}
