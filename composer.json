@@ -10,6 +10,7 @@
   ],
   "homepage": "http://www.tropotek.com/",
   "time": "2017-02-01",
+  "access": "institution",
   "license": "MIT",
   "version": "1.0.0",
   "authors": [

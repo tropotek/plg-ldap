@@ -21,7 +21,7 @@ class AuthHandler implements SubscriberInterface
 
     /**
      * @param AuthEvent $event
-     * @throws \Exception
+     * @return null|void
      */
     public function onLogin(AuthEvent $event)
     {
@@ -29,40 +29,26 @@ class AuthHandler implements SubscriberInterface
         //$config = \App\Factory::getConfig();
         $result = null;
         $submittedData = $event->all();
+
         if (!isset($submittedData['instHash'])) return;
         $institution = \App\Db\InstitutionMap::create()->findByHash($submittedData['instHash']);
         if (!$institution) return null;
         $data = \Tk\Db\Data::create(\Ldap\Plugin::getInstance()->getName() . '.institution', $institution->getId());
-
-        //if (LDAP->enabled....)
-
-        $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.
-        vd('----- LDAP', $data);
-
-        $adapter = new \Ldap\Auth\UnimelbAdapter($institution);
-        $result = $event->getAuth()->authenticate($adapter);
-        $event->setResult($result);
-        if ($result && $result->getCode() == \Tk\Auth\Result::SUCCESS) {
-            $event->set('auth.adapter.class', '\Ldap\Auth\UnimelbAdapter');
-            $event->set('auth.adapter.name', 'LDAP');
-        }
-
-        if (!$result) {
-            throw new \Tk\Auth\Exception('Invalid login credentials');
-        }
-        if (!$result->isValid()) {
+        if (!$data->get(\Ldap\Plugin::LDAP_ENABLE)) {
             return;
         }
+        $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.
 
-        /* @var \App\Db\User $user */
-        $user = \App\Db\UserMap::create()->find($result->getIdentity());
-        if (!$user) {
-            throw new \Tk\Auth\Exception('User not found: Contact Your Administrator.');
-        }
-        $event->set('user', $user);
+        $adapter = new \Ldap\Auth\UnimelbAdapter($institution);
+        $adapter->replace($submittedData);
+
+        $result = $event->getAuth()->authenticate($adapter);
+
+        $event->setResult($result);
+        $event->set('auth.password.access', false);   // Can modify their own password
+
     }
-
-
+    
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -87,7 +73,7 @@ class AuthHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            AuthEvents::LOGIN => array('onLogin', 10)
+            AuthEvents::LOGIN => array('onLogin', 10)   // execute this handler before the app auth handlers
         );
     }
     

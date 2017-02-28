@@ -58,9 +58,13 @@ class InstitutionSettings extends Iface
     {
         $this->form = new Form('formEdit', $request);
 
-        $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
-        $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
-        
+        $this->form->addField(new Field\Checkbox(\Ldap\Plugin::LDAP_ENABLE))->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
+        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_HOST))->setLabel('LDAP Host');
+        $this->form->addField(new Field\Checkbox(\Ldap\Plugin::LDAP_TLS))->setLabel('LDAP TLS');
+        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_PORT))->setLabel('LDAP Port');
+        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')->setNotes('Base DN query. EG: `ou=people,o=organization`.');
+        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_FILTER))->setLabel('Ldap Filter')->setNotes('Filter to locate user EG: `uid={username}`. `{username}` will be replaced with submitted username on login.');
+
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getCrumbs()->getBackUrl()));
@@ -80,21 +84,44 @@ class InstitutionSettings extends Iface
     {
         $values = $form->getValues();
         $this->data->replace($values);
-        
-        if (empty($values['plugin.title']) || strlen($values['plugin.title']) < 3) {
-            $form->addFieldError('plugin.title', 'Please enter your name');
+
+        if (!$values[\Ldap\Plugin::LDAP_ENABLE]) {
+            if (empty($values[\Ldap\Plugin::LDAP_HOST]) || !filter_var($values[\Ldap\Plugin::LDAP_HOST], \FILTER_VALIDATE_URL)) {
+                $form->addFieldError(\Ldap\Plugin::LDAP_HOST, 'Please enter a valid LDAP host');
+            }
+            if (empty($values[\Ldap\Plugin::LDAP_PORT]) || !is_numeric($values[\Ldap\Plugin::LDAP_PORT])) {
+                $form->addFieldError(\Ldap\Plugin::LDAP_PORT, 'Please enter a valid LDAP port. [TLS: 389, SSL: 636]');
+            }
+            if (empty($values[\Ldap\Plugin::LDAP_BASE_DN])) {
+                $form->addFieldError(\Ldap\Plugin::LDAP_BASE_DN, 'Enter a valid base DN query');
+            }
+            if (empty($values[\Ldap\Plugin::LDAP_FILTER])) {
+                $form->addFieldError(\Ldap\Plugin::LDAP_FILTER, 'Enter a filter string to locate a user');
+            }
+
+            // TODO: Do a live connection to the LDAP
+            try {
+                $ldap = @ldap_connect($values[\Ldap\Plugin::LDAP_HOST], $values[\Ldap\Plugin::LDAP_PORT]);
+                if ($ldap === false) {
+                    $form->addError('Cannot connect to LDAP host');
+                }
+                if ($values[\Ldap\Plugin::LDAP_TLS])
+                    @ldap_start_tls($ldap);
+                if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
+                    $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');
+                }
+            } catch (\Exception $e) {
+                $form->addError($e->getMessage());
+            }
         }
-        if (empty($values['plugin.email']) || !filter_var($values['plugin.email'], \FILTER_VALIDATE_EMAIL)) {
-            $form->addFieldError('plugin.email', 'Please enter a valid email address');
-        }
-        
+
         if ($this->form->hasErrors()) {
             return;
         }
         
         $this->data->save();
-        
-        \Tk\Alert::addSuccess('Site settings saved.');
+
+        \Tk\Alert::addSuccess('LDAP Settings saved, staff and students should now be able to access the system from the institution login page.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
             \Tk\Uri::create('/client/plugins.html')->redirect();
         }
@@ -113,6 +140,35 @@ class InstitutionSettings extends Iface
         // Render the form
         $fren = new \Tk\Form\Renderer\Dom($this->form);
         $template->insertTemplate($this->form->getId(), $fren->show()->getTemplate());
+
+
+        $formId = $this->form->getId();
+
+        $js = <<<JS
+jQuery(function($) {
+
+  function toggleFields(checkbox) {
+    var pre = checkbox.attr('name').substring(0, checkbox.attr('name').lastIndexOf('.'));
+    var list = $('input[name^="'+pre+'"]').not('.ignore');
+    if (!list.length) return;
+    var checked = list.slice(0 ,1).get(0).checked;
+    if (checked) {
+      list.slice(1).removeAttr('disabled', 'disabled').removeClass('disabled');
+    } else {
+      list.slice(1).attr('disabled', 'disabled').addClass('disabled');
+    }
+  }
+  $('#$formId').find('.tk-checkbox .checkbox input').change(function(e) {
+    toggleFields($(this));
+  }).each(function (i) {
+    toggleFields($(this));
+  });
+   
+});
+JS;
+        $template->appendJs($js);
+
+
 
         return $this->getPage()->setPageContent($template);
     }

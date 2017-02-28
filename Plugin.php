@@ -14,6 +14,13 @@ use Tk\EventDispatcher\EventDispatcher;
  */
 class Plugin extends \App\Plugin\Iface
 {
+    // data labels
+    const LDAP_ENABLE = 'inst.ldap.enable';
+    const LDAP_HOST = 'inst.ldap.host';
+    const LDAP_TLS = 'inst.ldap.tls';
+    const LDAP_PORT = 'inst.ldap.port';
+    const LDAP_BASE_DN = 'inst.ldap.baseDn';
+    const LDAP_FILTER = 'inst.ldap.filter';
 
 
     /**
@@ -45,9 +52,9 @@ class Plugin extends \App\Plugin\Iface
         $config = \Tk\Config::getInstance();
 
         // Setup the adapter, this should be selectable from the settings if needed?
-        $adapters = $config['system.auth.adapters'];
-        $adapters = array_merge(array('LDAP' => '\Ldap\Auth\UnimelbAdapter'), $adapters);
-        $config['system.auth.adapters'] = $adapters;
+//        $adapters = $config['system.auth.adapters'];
+//        $adapters = array_merge(array('LDAP' => '\Ldap\Auth\UnimelbAdapter'), $adapters);
+//        $config['system.auth.adapters'] = $adapters;
 
         $this->getPluginFactory()->registerInstitutionPlugin($this);
 
@@ -70,8 +77,8 @@ class Plugin extends \App\Plugin\Iface
 
         // Init Settings
         $data = \Tk\Db\Data::create($this->getName());
-        $data->set('plugin.title', 'EMS III Ldap Plugin');
-        $data->set('plugin.email', 'null@unimelb.edu.au');
+//        $data->set('plugin.title', 'EMS III Ldap Plugin');
+//        $data->set('plugin.email', 'null@unimelb.edu.au');
         $data->save();
     }
 
@@ -94,10 +101,10 @@ class Plugin extends \App\Plugin\Iface
     /**
      * @return \Tk\Uri
      */
-    public function getSettingsUrl()
-    {
-        return \Tk\Uri::create('/ldap/adminSettings.html');
-    }
+//    public function getSettingsUrl()
+//    {
+//        return \Tk\Uri::create('/ldap/adminSettings.html');
+//    }
 
     /**
      * Get the course settings URL, if null then there is none
