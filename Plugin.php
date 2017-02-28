@@ -33,7 +33,6 @@ class Plugin extends \App\Plugin\Iface
         return \Tk\Config::getInstance()->getPluginFactory()->getPlugin('ems-ldap');
     }
 
-
     // ---- \Tk\Plugin\Iface Interface Methods ----
     
     
@@ -97,14 +96,6 @@ class Plugin extends \App\Plugin\Iface
         $data->clear();
         $data->save();
     }
-
-    /**
-     * @return \Tk\Uri
-     */
-//    public function getSettingsUrl()
-//    {
-//        return \Tk\Uri::create('/ldap/adminSettings.html');
-//    }
 
     /**
      * Get the course settings URL, if null then there is none
