@@ -33,6 +33,7 @@ class AuthHandler implements SubscriberInterface
         if (!isset($submittedData['instHash'])) return;
         $institution = \App\Db\InstitutionMap::create()->findByHash($submittedData['instHash']);
         if (!$institution) return null;
+
         $data = \Tk\Db\Data::create(\Ldap\Plugin::getInstance()->getName() . '.institution', $institution->getId());
         if (!$data->get(\Ldap\Plugin::LDAP_ENABLE)) {
             return;

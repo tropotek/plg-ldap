@@ -24,6 +24,12 @@ class Plugin extends \App\Plugin\Iface
 
 
     /**
+     * @var \Tk\Db\Data
+     */
+    public static $institutionData = null;
+
+
+    /**
      * A helper method to get the Plugin instance globally
      *
      * @return \App\Plugin\Iface
@@ -32,6 +38,34 @@ class Plugin extends \App\Plugin\Iface
     {
         return \Tk\Config::getInstance()->getPluginFactory()->getPlugin('ems-ldap');
     }
+
+    /**
+     * @return \Tk\Db\Data
+     */
+    public static function getInstitutionData()
+    {
+        if (\Tk\Config::getInstance()->getUser() && !self::$institutionData) {
+            $institution = \Tk\Config::getInstance()->getUser()->getInstitution();
+            if ($institution)
+                self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
+        }
+        return self::$institutionData;
+    }
+
+    /**
+     * Return true if the plugin is enabled for this institution
+     *
+     * @return bool
+     */
+    public static function isEnabled()
+    {
+        $data = self::getInstitutionData();
+        if ($data && $data->has(self::LDAP_ENABLE)) {
+            return $data->get(self::LDAP_ENABLE);
+        }
+        return false;
+    }
+
 
     // ---- \Tk\Plugin\Iface Interface Methods ----
     

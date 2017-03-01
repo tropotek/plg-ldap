@@ -29,7 +29,8 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
     public function __construct($institution)
     {
         $this->institution = $institution;
-        $data = $this->institution->getData();
+
+        $data = \Tk\Db\Data::create(\Ldap\Plugin::getInstance()->getName() . '.institution', $institution->getId());
         parent::__construct($data->get(\Ldap\Plugin::LDAP_HOST), $data->get(\Ldap\Plugin::LDAP_BASE_DN),
             $data->get(\Ldap\Plugin::LDAP_FILTER), (int)$data->get(\Ldap\Plugin::LDAP_PORT), $data->get(\Ldap\Plugin::LDAP_TLS));
     }
@@ -49,7 +50,6 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
         $r = parent::authenticate();
         if ($r->getCode() != Result::SUCCESS)
             return $r;
-
         $ldapData = $r->get('ldap');
         if (!$ldapData) return new Result(Result::FAILURE_CREDENTIAL_INVALID, $username, 'Error Connecting to LDAP Server.');
 
