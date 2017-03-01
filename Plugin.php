@@ -89,12 +89,11 @@ class Plugin extends \App\Plugin\Iface
      */
     function doDeactivate()
     {
-        // TODO: Implement doDeactivate() method.
-        
-        // Delete any setting in the DB
-        $data = \Tk\Db\Data::create($this->getName());
-        $data->clear();
-        $data->save();
+        $db = \App\Factory::getDb();
+
+        // Clear the data table of all plugin data
+        $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('foreign_key'), $db->quote($this->getName().'%'));
+        $db->query($sql);
     }
 
     /**

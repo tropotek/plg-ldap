@@ -121,9 +121,10 @@ class InstitutionSettings extends Iface
         
         $this->data->save();
 
-        \Tk\Alert::addSuccess('LDAP Settings saved, staff and students should now be able to access the system from the institution login page.');
+        \Tk\Alert::addSuccess('LDAP Settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \Tk\Uri::create('/client/plugins.html')->redirect();
+            \App\Factory::getCrumbs()->getBackUrl()->redirect();
+            //\Tk\Uri::create('/client/plugins.html')->redirect();
         }
         \Tk\Uri::create()->redirect();
     }
