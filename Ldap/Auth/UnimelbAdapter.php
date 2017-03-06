@@ -57,18 +57,22 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, $username, 'Invalid institution.');
         }
 
+
         // Update the user record with ldap data
         $iid = 0;
         if ($this->institution)
-            $iid = $this->institution->id;
+            $iid = $this->institution->getId();
 
         /* @var \App\Db\User $user */
-        $user = \App\Db\User::getMapper()->findByUsername($r->getIdentity(), $iid);
+        $user = \App\Db\UserMap::create()->findByUsername($r->getIdentity(), $iid);
         if (!$user && isset($ldapData[0]['mail'][0])) {
-            $user = \App\Db\User::getMapper()->findByEmail($ldapData[0]['mail'][0], $iid);
+            $user = \App\Db\UserMap::create()->findByEmail($ldapData[0]['mail'][0], $iid);
         }
 
         // Create the user record if none exists....
+        // TODO: Maybe we could create an event to be fired here for the ldap listener
+        //       But doing this could create issues with the dispatcher?????? Test it and try???
+
         if (!$user) {
             $role = 'student';
             if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]))) {
@@ -98,7 +102,11 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
             $user->save();
         }
 
-        $r = new Result(Result::SUCCESS, $user->id);
+        $r = new Result(Result::SUCCESS, $user->getId());
+        //$r->set('loginType', 'ldap');
+        //$r->replace($this);
+        //$r->set('ldap', $ldapData);
+        //$r->set('institution', $this->institution);
         return $r;
     }
 

@@ -49,6 +49,80 @@ class AuthHandler implements SubscriberInterface
         $event->set('auth.password.access', false);   // Can modify their own password
 
     }
+
+    /**
+     * @param AuthEvent $event
+     * @throws \Exception
+     */
+    public function onLoginSuccess(AuthEvent $event)
+    {
+
+        // TODO: Would be nice to do this in the listener somewhere????`
+//        vd('ldap: onLoginSuccess');
+//        $result = $event->getResult();
+//        if (!$result) {
+//            throw new \Tk\Auth\Exception('Invalid login credentials');
+//        }
+//        if (!$result->isValid() || $result->get('loginType') != 'ldap') {
+//            return;
+//        }
+//
+//        $username = $result->get('username');
+//        $password = $result->get('password');
+//        $institution = $result->get('institution');
+//        $ldapData = $result->get('ldap');
+//
+//        // Update the user record with ldap data
+//        $iid = 0;
+//        if ($institution)
+//            $iid = $institution->id;
+//
+//        /* @var \App\Db\User $user */
+//        $user = \App\Db\UserMap::create()->findByUsername($result->getIdentity(), $iid);
+//        if (!$user && isset($ldapData[0]['mail'][0])) {
+//            $user = \App\Db\UserMap::create()->findByEmail($ldapData[0]['mail'][0], $iid);
+//        }
+//
+//        // Create the user record if none exists....
+//        if (!$user) {
+//            $role = 'student';
+//            if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]))) {
+//                $role = strtolower($ldapData[0]['auedupersontype'][0]);
+//            }
+//
+//            // Create new user
+//            $user = \App\Factory::createNewUser(
+//                $iid,
+//                $username,
+//                $ldapData[0]['mail'][0],
+//                $role,
+//                $password,
+//                $ldapData[0]['displayname'][0],
+//                $ldapData[0]['auedupersonid'][0]
+//            );
+//
+//        } else {
+//            // Update User info if record already exists
+//            $user->username = $username;
+//            if (!empty($ldapData[0]['mail'][0]))
+//                $user->email = $ldapData[0]['mail'][0];
+//            if (!empty($ldapData[0]['auedupersonid'][0]))
+//                $user->uid = $ldapData[0]['auedupersonid'][0];
+//
+//            $user->setPassword($password);
+//            $user->save();
+//        }
+//
+//
+//
+//        // TODO: We would need to overwrite the auth storage as well.
+//
+//        $event->setResult(new \Tk\Auth\Result(\Tk\Auth\Result::SUCCESS, $user->getId()));
+
+
+
+
+    }
     
 
     /**
@@ -74,7 +148,8 @@ class AuthHandler implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            AuthEvents::LOGIN => array('onLogin', 10)   // execute this handler before the app auth handlers
+            AuthEvents::LOGIN => array('onLogin', 10),   // execute this handler before the app auth handlers
+            AuthEvents::LOGIN_SUCCESS => array('onLoginSuccess', 10)
         );
     }
     
