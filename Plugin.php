@@ -82,18 +82,22 @@ class Plugin extends \App\Plugin\Iface
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
 
-        $config = \Tk\Config::getInstance();
+        $config = $this->getConfig();
 
         // Setup the adapter, this should be selectable from the settings if needed?
 //        $adapters = $config['system.auth.adapters'];
 //        $adapters = array_merge(array('LDAP' => '\Ldap\Auth\UnimelbAdapter'), $adapters);
 //        $config['system.auth.adapters'] = $adapters;
 
-        $this->getPluginFactory()->registerInstitutionPlugin($this);
+        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_CLIENT);
 
         /** @var EventDispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
-        $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
+        /** @var \App\Db\Institution $institution */
+        $institution = $config->getInstitution();
+        if($institution && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_CLIENT, $institution->getId())) {
+            $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
+        }
 
     }
     
@@ -135,9 +139,13 @@ class Plugin extends \App\Plugin\Iface
      *
      * @return string|\Tk\Uri|null
      */
-    public function getInstitutionSettingsUrl()
+    public function getZoneSettingsUrl($zoneName)
     {
-        return \Tk\Uri::create('/ldap/institutionSettings.html');
+        switch ($zoneName) {
+            case \App\Plugin\Iface::ZONE_CLIENT:
+                return \Tk\Uri::create('/ldap/institutionSettings.html');
+        }
+        return null;
     }
 
 }
