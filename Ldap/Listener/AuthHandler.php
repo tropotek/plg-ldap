@@ -1,7 +1,7 @@
 <?php
 namespace Ldap\Listener;
 
-use Tk\EventDispatcher\SubscriberInterface;
+use Tk\EventDispatcher\Subscriber;
 use Tk\Kernel\KernelEvents;
 use Tk\Event\ControllerEvent;
 use Tk\Event\GetResponseEvent;
@@ -15,7 +15,7 @@ use Tk\Auth\AuthEvents;
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class AuthHandler implements SubscriberInterface
+class AuthHandler implements Subscriber
 {
 
 

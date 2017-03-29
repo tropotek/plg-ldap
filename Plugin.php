@@ -2,7 +2,7 @@
 namespace Ldap;
 
 
-use Tk\EventDispatcher\EventDispatcher;
+use Tk\EventDispatcher\Dispatcher;
 
 
 /**
@@ -91,7 +91,7 @@ class Plugin extends \App\Plugin\Iface
 
         $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_CLIENT);
 
-        /** @var EventDispatcher $dispatcher */
+        /** @var Dispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
         /** @var \App\Db\Institution $institution */
         $institution = $config->getInstitution();
