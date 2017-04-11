@@ -99,7 +99,7 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
             if (!empty($ldapData[0]['auedupersonid'][0]))
                 $user->uid = $ldapData[0]['auedupersonid'][0];
 
-            $user->setPassword($password);
+            $user->setNewPassword($password);
             $user->save();
         }
         $r = new Result(Result::SUCCESS, $user->getId());
