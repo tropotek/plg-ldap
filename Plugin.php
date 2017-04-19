@@ -130,7 +130,8 @@ class Plugin extends \App\Plugin\Iface
         $db = \App\Factory::getDb();
 
         // Clear the data table of all plugin data
-        $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('foreign_key'), $db->quote($this->getName().'%'));
+        $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('fkey'),
+            $db->quote($this->getName().'%'));
         $db->query($sql);
     }
 
