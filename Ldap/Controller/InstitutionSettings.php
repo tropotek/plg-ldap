@@ -166,8 +166,6 @@ jQuery(function($) {
 JS;
         $template->appendJs($js);
 
-
-
         return $this->getPage()->setPageContent($template);
     }
 
