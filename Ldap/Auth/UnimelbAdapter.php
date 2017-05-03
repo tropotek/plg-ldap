@@ -51,27 +51,24 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
         if ($r->getCode() != Result::SUCCESS)
             return $r;
         $ldapData = $r->get('ldap');
+
         if (!$ldapData) return new Result(Result::FAILURE_CREDENTIAL_INVALID, $username, 'Error Connecting to LDAP Server.');
 
         if (!$this->institution) {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, $username, 'Invalid institution.');
         }
 
-        // Update the user record with ldap data
-        $iid = 0;
-        if ($this->institution)
-            $iid = $this->institution->getId();
+        // TODO: This should be in the Listener and the adapter should be more generic.
+        // TODO: If this is in a listener then custom listeners could be created for different institutions...
 
+        // Update the user record with ldap data
         /* @var \App\Db\User $user */
-        $user = \App\Db\UserMap::create()->findByUsername($r->getIdentity(), $iid);
+        $user = \App\Db\UserMap::create()->findByUsername($r->getIdentity(), $this->institution->getId());
         if (!$user && isset($ldapData[0]['mail'][0])) {
-            $user = \App\Db\UserMap::create()->findByEmail($ldapData[0]['mail'][0], $iid);
+            $user = \App\Db\UserMap::create()->findByEmail($ldapData[0]['mail'][0], $this->institution->getId());
         }
 
-        // Create the user record if none exists....
-        // TODO: Maybe we could create an event to be fired here for the ldap listener
-        //       But doing this could create issues with the dispatcher?????? Test it and try???
-        if (!$user) {
+        if (!$user) {   // Create a user record if none exists
             $section = \App\Db\UserRole::SECTION_STUDENT;
             if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]), $reg)) {
                 if ($reg[1] == 'staff') {
@@ -81,9 +78,8 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
                 }
             }
 
-            // Create new user
             $user = \App\Factory::createNewUser(
-                $iid,
+                $this->institution->getId(),
                 $username,
                 $ldapData[0]['mail'][0],
                 $section,
@@ -91,8 +87,7 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
                 $ldapData[0]['displayname'][0],
                 $ldapData[0]['auedupersonid'][0]
             );
-        } else {
-            // Update User info if record already exists
+        } else {    // Update User info if record already exists
             $user->username = $username;
             if (!empty($ldapData[0]['mail'][0]))
                 $user->email = $ldapData[0]['mail'][0];
@@ -102,11 +97,8 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
             $user->setNewPassword($password);
             $user->save();
         }
+
         $r = new Result(Result::SUCCESS, $user->getId());
-        //$r->set('loginType', 'ldap');
-        //$r->replace($this);
-        //$r->set('ldap', $ldapData);
-        //$r->set('institution', $this->institution);
         return $r;
     }
 
