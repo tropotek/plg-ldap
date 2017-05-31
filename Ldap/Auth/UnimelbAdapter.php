@@ -69,12 +69,12 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
         }
 
         if (!$user) {   // Create a user record if none exists
-            $section = \App\Db\UserGroup::ROLE_STUDENT;
+            $role = \App\Db\UserGroup::ROLE_STUDENT;
             if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]), $reg)) {
                 if ($reg[1] == 'staff') {
-                    $section = \App\Db\UserGroup::ROLE_STAFF;
+                    $role = \App\Db\UserGroup::ROLE_STAFF;
                 } else if ($reg[1] == 'staff') {
-                    $section = \App\Db\UserGroup::ROLE_STUDENT;
+                    $role = \App\Db\UserGroup::ROLE_STUDENT;
                 }
             }
 
@@ -82,7 +82,7 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
                 $this->institution->getId(),
                 $username,
                 $ldapData[0]['mail'][0],
-                $section,
+                $role,
                 $password,
                 $ldapData[0]['displayname'][0],
                 $ldapData[0]['auedupersonid'][0]
