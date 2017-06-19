@@ -1,8 +1,7 @@
 <?php
 namespace Ldap;
 
-
-use Tk\EventDispatcher\Dispatcher;
+use Tk\Event\Dispatcher;
 
 
 /**
@@ -12,8 +11,13 @@ use Tk\EventDispatcher\Dispatcher;
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
-class Plugin extends \App\Plugin\Iface
+class Plugin extends \Tk\Plugin\Iface
 {
+
+    const ZONE_INSTITUTION = 'institution';
+    const ZONE_COURSE_PROFILE = 'profile';
+    const ZONE_COURSE = 'course';
+
     // data labels
     const LDAP_ENABLE = 'inst.ldap.enable';
     const LDAP_HOST = 'inst.ldap.host';
@@ -32,7 +36,7 @@ class Plugin extends \App\Plugin\Iface
     /**
      * A helper method to get the Plugin instance globally
      *
-     * @return \App\Plugin\Iface
+     * @return \Tk\Plugin\Iface
      */
     static function getInstance()
     {
@@ -89,13 +93,13 @@ class Plugin extends \App\Plugin\Iface
 //        $adapters = array_merge(array('LDAP' => '\Ldap\Auth\UnimelbAdapter'), $adapters);
 //        $config['system.auth.adapters'] = $adapters;
 
-        $this->getPluginFactory()->registerZonePlugin($this, \App\Plugin\Iface::ZONE_CLIENT);
+        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
         /** @var \App\Db\Institution $institution */
         $institution = $config->getInstitution();
-        if($institution && $this->isZonePluginEnabled(\App\Plugin\Iface::ZONE_CLIENT, $institution->getId())) {
+        if($institution && $this->isZonePluginEnabled(self::ZONE_INSTITUTION, $institution->getId())) {
             $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
 
@@ -143,7 +147,7 @@ class Plugin extends \App\Plugin\Iface
     public function getZoneSettingsUrl($zoneName)
     {
         switch ($zoneName) {
-            case \App\Plugin\Iface::ZONE_CLIENT:
+            case self::ZONE_INSTITUTION:
                 return \Tk\Uri::create('/ldap/institutionSettings.html');
         }
         return null;

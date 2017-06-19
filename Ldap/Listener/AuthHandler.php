@@ -1,10 +1,7 @@
 <?php
 namespace Ldap\Listener;
 
-use Tk\EventDispatcher\Subscriber;
-use Tk\Kernel\KernelEvents;
-use Tk\Event\ControllerEvent;
-use Tk\Event\GetResponseEvent;
+use Tk\Event\Subscriber;
 use Tk\Event\AuthEvent;
 use Tk\Auth\AuthEvents;
 
@@ -18,15 +15,12 @@ use Tk\Auth\AuthEvents;
 class AuthHandler implements Subscriber
 {
 
-
     /**
      * @param AuthEvent $event
      * @return null|void
      */
     public function onLogin(AuthEvent $event)
     {
-
-        //$config = \App\Factory::getConfig();
         $result = null;
         $submittedData = $event->all();
 
