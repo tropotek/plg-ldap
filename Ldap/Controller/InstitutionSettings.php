@@ -5,7 +5,7 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use \App\Controller\Iface;
+use App\Controller\Iface;
 
 /**
  * Class Contact
