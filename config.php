@@ -13,7 +13,7 @@ $params = array('role' => 'admin');
 $routes->add('LDAP Admin Settings', new \Tk\Routing\Route('/ldap/adminSettings.html', 'Ldap\Controller\SystemSettings::doDefault', $params));
 
 
-$params = array('role' => 'client');
+$params = array('role' => array('admin', 'client'));
 $routes->add('LDAP Institution Settings', new \Tk\Routing\Route('/ldap/institutionSettings.html', 'Ldap\Controller\InstitutionSettings::doDefault', $params));
 
 

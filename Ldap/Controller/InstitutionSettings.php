@@ -98,7 +98,6 @@ class InstitutionSettings extends Iface
                 $form->addFieldError(\Ldap\Plugin::LDAP_FILTER, 'Enter a filter string to locate a user');
             }
 
-            // TODO: Do a live connection to the LDAP
             try {
                 $ldap = @ldap_connect($values[\Ldap\Plugin::LDAP_HOST], $values[\Ldap\Plugin::LDAP_PORT]);
                 if ($ldap === false) {

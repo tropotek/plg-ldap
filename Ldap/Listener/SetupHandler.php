@@ -14,14 +14,8 @@ class SetupHandler implements Subscriber
 {
 
 
-    public function onInit(\Tk\Event\KernelEvent $event)
-    {
-        vd('onInit');
-    }
-
     public function onRequest(\Tk\Event\GetResponseEvent $event)
     {
-        //vd('onRequest');
         $config = \Tk\Config::getInstance();
         /** @var \App\Db\Institution $institution */
         $institution = $config->getInstitution();
@@ -30,6 +24,14 @@ class SetupHandler implements Subscriber
             $dispatcher = $config->getEventDispatcher();
             $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
+    }
+
+
+
+
+    public function onInit(\Tk\Event\KernelEvent $event)
+    {
+        //vd('onInit');
     }
 
     public function onController(\Tk\Event\ControllerEvent $event)
@@ -62,8 +64,8 @@ class SetupHandler implements Subscriber
     {
         return array(
             //\Tk\Kernel\KernelEvents::INIT => array('onInit', 0),
-            \Tk\Kernel\KernelEvents::REQUEST => array('onRequest', -10),
-            \Tk\Kernel\KernelEvents::CONTROLLER => array('onController', 0)
+            //\Tk\Kernel\KernelEvents::CONTROLLER => array('onController', 0),
+            \Tk\Kernel\KernelEvents::REQUEST => array('onRequest', -10)
         );
     }
     

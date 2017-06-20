@@ -48,9 +48,6 @@ class AuthHandler implements Subscriber
     public function onLoginSuccess(AuthEvent $event)
     {
 
-        vd('ldap\AuthHandler::onLoginSuccess  - is it creating the new user accounts ?????');
-        // See the UnimelbAdapter....
-
     }
     
 
@@ -78,7 +75,7 @@ class AuthHandler implements Subscriber
     {
         return array(
             AuthEvents::LOGIN => array('onLogin', 10),   // execute this handler before the app auth handlers
-            AuthEvents::LOGIN_SUCCESS => array('onLoginSuccess', 10)
+            //AuthEvents::LOGIN_SUCCESS => array('onLoginSuccess', 10)
         );
     }
     
