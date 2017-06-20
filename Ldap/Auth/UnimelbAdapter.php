@@ -49,8 +49,10 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
         
         /* @var \Tk\Auth\Result $r */
         $r = parent::authenticate();
+        vd($r);
         if ($r->getCode() != Result::SUCCESS)
             return $r;
+        vd();
         $ldapData = $r->get('ldap');
 
         if (!$ldapData) return new Result(Result::FAILURE_CREDENTIAL_INVALID, $username, 'Error Connecting to LDAP Server.');

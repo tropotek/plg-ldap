@@ -23,16 +23,9 @@ class AuthHandler implements Subscriber
     {
         $result = null;
         $submittedData = $event->all();
-        //vd($submittedData);
-        //if (!isset($submittedData['instHash'])) return;
-        //$institution = \App\Db\InstitutionMap::create()->findByHash($submittedData['instHash']);
         $institution = \Tk\Config::getInstance()->getInstitution();
-        vd($institution);
         if (!$institution) return null;
-
         $data = \Ldap\Plugin::getInstitutionData($institution);
-        //$data = \Tk\Db\Data::create(\Ldap\Plugin::getInstance()->getName() . '.institution', $institution->getId());
-
         if (!$data->get(\Ldap\Plugin::LDAP_ENABLE)) {
             return;
         }
