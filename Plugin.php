@@ -100,6 +100,8 @@ class Plugin extends \Tk\Plugin\Iface
         /** @var \App\Db\Institution $institution */
         $institution = $config->getInstitution();
         vd($institution);
+        // TODO: Implement a kernel onRequest handler and add the subscriber in there????? This is too early and we cannot get institution at this pointci
+        //
         if($institution && $this->isZonePluginEnabled(self::ZONE_INSTITUTION, $institution->getId())) {
             $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
