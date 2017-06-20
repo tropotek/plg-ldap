@@ -44,26 +44,32 @@ class Plugin extends \Tk\Plugin\Iface
     }
 
     /**
+     * @return \App\PluginApi
+     */
+    public static function getPluginApi()
+    {
+        return \Tk\Config::getInstance()->getPluginApi();
+    }
+
+    /**
+     * @param \App\Db\Institution $institution
      * @return \Tk\Db\Data
      */
-    public static function getInstitutionData()
+    public static function getInstitutionData($institution)
     {
-        if (\Tk\Config::getInstance()->getUser() && !self::$institutionData) {
-            $institution = \Tk\Config::getInstance()->getUser()->getInstitution();
-            if ($institution)
-                self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
-        }
-        return self::$institutionData;
+        \Tk\Config::getInstance()->setInstitution($institution);
+        return self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
     }
 
     /**
      * Return true if the plugin is enabled for this institution
      *
+     * @param $institution
      * @return bool
      */
-    public static function isEnabled()
+    public static function isEnabled($institution)
     {
-        $data = self::getInstitutionData();
+        $data = self::getInstitutionData($institution);
         if ($data && $data->has(self::LDAP_ENABLE)) {
             return $data->get(self::LDAP_ENABLE);
         }
@@ -87,18 +93,13 @@ class Plugin extends \Tk\Plugin\Iface
         include dirname(__FILE__) . '/config.php';
 
         $config = $this->getConfig();
-
-        // Setup the adapter, this should be selectable from the settings if needed?
-//        $adapters = $config['system.auth.adapters'];
-//        $adapters = array_merge(array('LDAP' => '\Ldap\Auth\UnimelbAdapter'), $adapters);
-//        $config['system.auth.adapters'] = $adapters;
-
         $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
 
         /** @var Dispatcher $dispatcher */
-        $dispatcher = \Tk\Config::getInstance()->getEventDispatcher();
+        $dispatcher = $config->getEventDispatcher();
         /** @var \App\Db\Institution $institution */
         $institution = $config->getInstitution();
+        vd($institution);
         if($institution && $this->isZonePluginEnabled(self::ZONE_INSTITUTION, $institution->getId())) {
             $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
         }

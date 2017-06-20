@@ -1,6 +1,7 @@
 <?php
 namespace Ldap\Auth;
 
+use Ldap\Plugin;
 use Tk\Auth\Result;
 
 /**
@@ -30,7 +31,7 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
     {
         $this->institution = $institution;
 
-        $data = \Tk\Db\Data::create(\Ldap\Plugin::getInstance()->getName() . '.institution', $institution->getId());
+        $data = Plugin::getInstitutionData($institution);
         parent::__construct($data->get(\Ldap\Plugin::LDAP_HOST), $data->get(\Ldap\Plugin::LDAP_BASE_DN),
             $data->get(\Ldap\Plugin::LDAP_FILTER), (int)$data->get(\Ldap\Plugin::LDAP_PORT), $data->get(\Ldap\Plugin::LDAP_TLS));
     }
@@ -63,31 +64,35 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
 
         // Update the user record with ldap data
         /* @var \App\Db\User $user */
-        $user = \App\Db\UserMap::create()->findByUsername($r->getIdentity(), $this->institution->getId());
+        $user = Plugin::getPluginApi()->findUser($r->getIdentity(), $this->institution->getId());;
         if (!$user && isset($ldapData[0]['mail'][0])) {
-            $user = \App\Db\UserMap::create()->findByEmail($ldapData[0]['mail'][0], $this->institution->getId());
+            $user = Plugin::getPluginApi()->findUser($ldapData[0]['mail'][0], $this->institution->getId());
         }
 
-        if (!$user) {   // Create a user record if none exists
-            $role = \App\Db\UserGroup::ROLE_STUDENT;
+        if (!$user) {
+            // Create a user record if none exists
+            $role = 'student';
             if (preg_match('/(staff|student)/', strtolower($ldapData[0]['auedupersontype'][0]), $reg)) {
                 if ($reg[1] == 'staff') {
-                    $role = \App\Db\UserGroup::ROLE_STAFF;
-                } else if ($reg[1] == 'staff') {
-                    $role = \App\Db\UserGroup::ROLE_STUDENT;
+                    $role = 'staff';
+                } else if ($reg[1] == 'student') {
+                    $role = 'student';
                 }
             }
-
-            $user = \App\Factory::createNewUser(
-                $this->institution->getId(),
-                $username,
-                $ldapData[0]['mail'][0],
-                $role,
-                $password,
-                $ldapData[0]['displayname'][0],
-                $ldapData[0]['auedupersonid'][0]
+            $params = array(
+                'type' => 'ldap',
+                'institutionId' => $this->institution->getId(),
+                'username' => $username,
+                'email' => $ldapData[0]['mail'][0],
+                'role' => $role,
+                'password' => $password,
+                'name' => $ldapData[0]['displayname'][0],
+                'active' => true,
+                'uid' => $ldapData[0]['auedupersonid'][0]
             );
-        } else {    // Update User info if record already exists
+            $user = Plugin::getPluginApi()->createUser($params);
+        } else {
+            // Update User info if record already exists
             $user->username = $username;
             if (!empty($ldapData[0]['mail'][0]))
                 $user->email = $ldapData[0]['mail'][0];

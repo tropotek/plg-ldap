@@ -58,7 +58,7 @@ class SystemSettings extends Iface
         
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getCrumbs()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getSession()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -91,7 +91,7 @@ class SystemSettings extends Iface
         
         \Tk\Alert::addSuccess('Site settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \Tk\Uri::create('/admin/plugins.html')->redirect();
+            \App\Factory::getSession()->getBackUrl()->redirect();
         }
         \Tk\Uri::create()->redirect();
     }

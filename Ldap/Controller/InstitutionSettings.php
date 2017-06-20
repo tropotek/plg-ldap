@@ -40,9 +40,6 @@ class InstitutionSettings extends Iface
     {
         parent::__construct();
         $this->setPageTitle('LDAP Plugin - Institution Settings');
-
-        $this->institution = $this->getUser()->getInstitution();
-        $this->data = \Ldap\Plugin::getInstitutionData();
     }
 
     /**
@@ -53,6 +50,10 @@ class InstitutionSettings extends Iface
      */
     public function doDefault(Request $request)
     {
+
+        $this->institution = \App\Db\InstitutionMap::create()->find($request->get('zoneId'));
+        $this->data = \Ldap\Plugin::getInstitutionData($this->institution);
+
         $this->form = \App\Factory::createForm('formEdit');
         $this->form->setParam('renderer', \App\Factory::createFormRenderer($this->form));
 
@@ -65,7 +66,7 @@ class InstitutionSettings extends Iface
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getCrumbs()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getSession()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -121,7 +122,7 @@ class InstitutionSettings extends Iface
 
         \Tk\Alert::addSuccess('LDAP Settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \App\Factory::getCrumbs()->getBackUrl()->redirect();
+            \App\Factory::getSession()->getBackUrl()->redirect();
         }
         \Tk\Uri::create()->redirect();
     }
@@ -137,34 +138,6 @@ class InstitutionSettings extends Iface
         
         // Render the form
         $template->insertTemplate($this->form->getId(), $this->form->getParam('renderer')->show()->getTemplate());
-
-
-//        $formId = $this->form->getId();
-//        $js = <<<JS
-//jQuery(function($) {
-//
-//  function toggleFields(checkbox) {
-//    var name = checkbox.get(0).name;
-//    var parent = checkbox.closest('.tab-pane, .tk-form-fields');
-//    var list = parent.find('input, textarea, select').not('input[name="'+name+'"]');
-//
-//    if (!list.length) return;
-//    if (checkbox.prop('checked')) {
-//      list.removeAttr('disabled', 'disabled').removeClass('disabled');
-//    } else {
-//      list.attr('disabled', 'disabled').addClass('disabled');
-//    }
-//  }
-//
-//  $('#$formId').find('input[name$=".enable"]').not('input[type="hidden"]').change(function(e) {
-//    toggleFields($(this));
-//  }).each(function (i) {
-//    toggleFields($(this));
-//  });
-//
-//});
-//JS;
-//        $template->appendJs($js);
 
         return $this->getPage()->setPageContent($template);
     }
