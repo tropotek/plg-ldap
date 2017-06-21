@@ -41,15 +41,6 @@ class AuthHandler implements Subscriber
 
     }
 
-    /**
-     * @param AuthEvent $event
-     * @throws \Exception
-     */
-    public function onLoginSuccess(AuthEvent $event)
-    {
-
-    }
-    
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
