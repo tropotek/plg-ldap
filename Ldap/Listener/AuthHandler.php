@@ -29,7 +29,8 @@ class AuthHandler implements Subscriber
         if (!$data->get(\Ldap\Plugin::LDAP_ENABLE)) {
             return;
         }
-        $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.
+
+        $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.????
 
         $adapter = new \Ldap\Auth\UnimelbAdapter($institution);
         $adapter->replace($submittedData);
