@@ -46,7 +46,7 @@ class InstitutionSettings extends Iface
      * doDefault
      *
      * @param Request $request
-     * @return \App\Page\Iface
+     * @return \Dom\Template
      */
     public function doDefault(Request $request)
     {
@@ -129,16 +129,16 @@ class InstitutionSettings extends Iface
     /**
      * show()
      *
-     * @return \App\Page\Iface
+     * @return \Dom\Template
      */
     public function show()
     {
-        $template = $this->getTemplate();
+        $template = parent::show();
         
         // Render the form
         $template->insertTemplate($this->form->getId(), $this->form->getParam('renderer')->show()->getTemplate());
 
-        return $this->getPage()->setPageContent($template);
+        return $template;
     }
 
     /**
