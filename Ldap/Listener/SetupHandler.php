@@ -17,12 +17,9 @@ class SetupHandler implements Subscriber
     public function onRequest(\Tk\Event\GetResponseEvent $event)
     {
         $config = \Tk\Config::getInstance();
-        /** @var \App\Db\Institution $institution */
-        $institution = $config->getInstitution();
+        $institution = \App\Factory::getInstitution();
         if($institution && \Ldap\Plugin::getInstance()->isZonePluginEnabled(\Ldap\Plugin::ZONE_INSTITUTION, $institution->getId())) {
-            /** @var \Tk\Event\Dispatcher $dispatcher */
-            $dispatcher = $config->getEventDispatcher();
-            $dispatcher->addSubscriber(new \Ldap\Listener\AuthHandler());
+            \App\Factory::getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
     }
 
