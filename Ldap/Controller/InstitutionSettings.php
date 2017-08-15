@@ -46,7 +46,6 @@ class InstitutionSettings extends Iface
      * doDefault
      *
      * @param Request $request
-     * @return \Dom\Template
      */
     public function doDefault(Request $request)
     {
@@ -71,7 +70,6 @@ class InstitutionSettings extends Iface
         $this->form->load($this->data->toArray());
         $this->form->execute();
 
-        return $this->show();
     }
 
     /**
@@ -84,8 +82,9 @@ class InstitutionSettings extends Iface
         $values = $form->getValues();
         $this->data->replace($values);
 
-        if (!$values[\Ldap\Plugin::LDAP_ENABLE]) {
-            if (empty($values[\Ldap\Plugin::LDAP_HOST]) || !filter_var($values[\Ldap\Plugin::LDAP_HOST], \FILTER_VALIDATE_URL)) {
+        if ($values[\Ldap\Plugin::LDAP_ENABLE]) {
+            //if (empty($values[\Ldap\Plugin::LDAP_HOST]) || !filter_var($values[\Ldap\Plugin::LDAP_HOST], \FILTER_VALIDATE_URL)) {
+            if (empty($values[\Ldap\Plugin::LDAP_HOST])) {
                 $form->addFieldError(\Ldap\Plugin::LDAP_HOST, 'Please enter a valid LDAP host');
             }
             if (empty($values[\Ldap\Plugin::LDAP_PORT]) || !is_numeric($values[\Ldap\Plugin::LDAP_PORT])) {
@@ -150,20 +149,19 @@ class InstitutionSettings extends Iface
     {
         $xhtml = <<<XHTML
 <div var="content">
-
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cogs fa-fw"></i> Actions</div>
-      <div class="panel-body " var="action-panel">
-        <a href="javascript: window.history.back();" class="btn btn-default"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
-      </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><i class="fa fa-cogs fa-fw"></i> Actions</div>
+    <div class="panel-body " var="action-panel">
+      <a href="javascript: window.history.back();" class="btn btn-default"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
     </div>
-    
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cog"></i> LDAP Settings</div>
-      <div class="panel-body">
-        <div var="formEdit"></div>
-      </div>
+  </div>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading"><i class="fa fa-cog"></i> LDAP Settings</div>
+    <div class="panel-body">
+      <div var="formEdit"></div>
     </div>
+  </div>
 </div>
 XHTML;
 

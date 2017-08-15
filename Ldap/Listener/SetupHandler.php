@@ -18,6 +18,10 @@ class SetupHandler implements Subscriber
     {
         $config = \Tk\Config::getInstance();
         $institution = \App\Factory::getInstitution();
+        if (!$institution && $event->getRequest()->has('instHash')) {
+            $institution = \App\Db\InstitutionMap::create()->findByHash($event->getRequest()->get('instHash'));
+            $config->setInstitution($institution);
+        }
         if($institution && \Ldap\Plugin::getInstance()->isZonePluginEnabled(\Ldap\Plugin::ZONE_INSTITUTION, $institution->getId())) {
             \App\Factory::getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
