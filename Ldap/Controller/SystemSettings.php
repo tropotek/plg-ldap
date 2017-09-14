@@ -34,7 +34,6 @@ class SystemSettings extends Iface
      */
     public function __construct()
     {
-        parent::__construct();
         $this->setPageTitle('LDAP Plugin Settings');
 
         /** @var \Ldap\Plugin $plugin */
