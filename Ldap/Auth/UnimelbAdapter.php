@@ -11,7 +11,6 @@ use Tk\Auth\Result;
  * ```
  * $adapter->replace(array('username' => $value, 'password' => $password));
  * ```
- *
  */
 class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
 {
@@ -32,8 +31,8 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
         $this->institution = $institution;
 
         $data = Plugin::getInstitutionData($institution);
-        parent::__construct($data->get(\Ldap\Plugin::LDAP_HOST), $data->get(\Ldap\Plugin::LDAP_BASE_DN),
-            $data->get(\Ldap\Plugin::LDAP_FILTER), (int)$data->get(\Ldap\Plugin::LDAP_PORT), $data->get(\Ldap\Plugin::LDAP_TLS));
+        parent::__construct($data->get(Plugin::LDAP_HOST), $data->get(Plugin::LDAP_BASE_DN),
+            $data->get(Plugin::LDAP_FILTER), (int)$data->get(Plugin::LDAP_PORT), $data->get(Plugin::LDAP_TLS));
     }
 
     /**

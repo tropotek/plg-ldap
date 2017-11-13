@@ -6,6 +6,7 @@ use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
 use App\Controller\Iface;
+use Ldap\Plugin;
 
 /**
  * Class Contact
@@ -50,17 +51,17 @@ class InstitutionSettings extends Iface
     {
 
         $this->institution = \App\Db\InstitutionMap::create()->find($request->get('zoneId'));
-        $this->data = \Ldap\Plugin::getInstitutionData($this->institution);
+        $this->data = Plugin::getInstitutionData($this->institution);
 
         $this->form = \App\Factory::createForm('formEdit');
         $this->form->setParam('renderer', \App\Factory::createFormRenderer($this->form));
 
-        $this->form->addField(new Field\Checkbox(\Ldap\Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
-        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_HOST))->setLabel('LDAP Host');
-        $this->form->addField(new Field\Checkbox(\Ldap\Plugin::LDAP_TLS))->setLabel('LDAP TLS');
-        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_PORT))->setLabel('LDAP Port');
-        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')->setNotes('Base DN query. EG: `ou=people,o=organization`.');
-        $this->form->addField(new Field\Input(\Ldap\Plugin::LDAP_FILTER))->setLabel('Ldap Filter')->setNotes('Filter to locate user EG: `uid={username}`. `{username}` will be replaced with submitted username on login.');
+        $this->form->addField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
+        $this->form->addField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host');
+        $this->form->addField(new Field\Checkbox(Plugin::LDAP_TLS))->setLabel('LDAP TLS');
+        $this->form->addField(new Field\Input(Plugin::LDAP_PORT))->setLabel('LDAP Port');
+        $this->form->addField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')->setNotes('Base DN query. EG: `ou=people,o=organization`.');
+        $this->form->addField(new Field\Input(Plugin::LDAP_FILTER))->setLabel('Ldap Filter')->setNotes('Filter to locate user EG: `uid={username}`. `{username}` will be replaced with submitted username on login.');
 
         $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
@@ -81,27 +82,27 @@ class InstitutionSettings extends Iface
         $values = $form->getValues();
         $this->data->replace($values);
 
-        if ($values[\Ldap\Plugin::LDAP_ENABLE]) {
-            //if (empty($values[\Ldap\Plugin::LDAP_HOST]) || !filter_var($values[\Ldap\Plugin::LDAP_HOST], \FILTER_VALIDATE_URL)) {
-            if (empty($values[\Ldap\Plugin::LDAP_HOST])) {
-                $form->addFieldError(\Ldap\Plugin::LDAP_HOST, 'Please enter a valid LDAP host');
+        if ($values[Plugin::LDAP_ENABLE]) {
+            //if (empty($values[Plugin::LDAP_HOST]) || !filter_var($values[Plugin::LDAP_HOST], \FILTER_VALIDATE_URL)) {
+            if (empty($values[Plugin::LDAP_HOST])) {
+                $form->addFieldError(Plugin::LDAP_HOST, 'Please enter a valid LDAP host');
             }
-            if (empty($values[\Ldap\Plugin::LDAP_PORT]) || !is_numeric($values[\Ldap\Plugin::LDAP_PORT])) {
-                $form->addFieldError(\Ldap\Plugin::LDAP_PORT, 'Please enter a valid LDAP port. [TLS: 389, SSL: 636]');
+            if (empty($values[Plugin::LDAP_PORT]) || !is_numeric($values[Plugin::LDAP_PORT])) {
+                $form->addFieldError(Plugin::LDAP_PORT, 'Please enter a valid LDAP port. [TLS: 389, SSL: 636]');
             }
-            if (empty($values[\Ldap\Plugin::LDAP_BASE_DN])) {
-                $form->addFieldError(\Ldap\Plugin::LDAP_BASE_DN, 'Enter a valid base DN query');
+            if (empty($values[Plugin::LDAP_BASE_DN])) {
+                $form->addFieldError(Plugin::LDAP_BASE_DN, 'Enter a valid base DN query');
             }
-            if (empty($values[\Ldap\Plugin::LDAP_FILTER])) {
-                $form->addFieldError(\Ldap\Plugin::LDAP_FILTER, 'Enter a filter string to locate a user');
+            if (empty($values[Plugin::LDAP_FILTER])) {
+                $form->addFieldError(Plugin::LDAP_FILTER, 'Enter a filter string to locate a user');
             }
 
             try {
-                $ldap = @ldap_connect($values[\Ldap\Plugin::LDAP_HOST], $values[\Ldap\Plugin::LDAP_PORT]);
+                $ldap = @ldap_connect($values[Plugin::LDAP_HOST], $values[Plugin::LDAP_PORT]);
                 if ($ldap === false) {
                     $form->addError('Cannot connect to LDAP host');
                 }
-                if ($values[\Ldap\Plugin::LDAP_TLS])
+                if ($values[Plugin::LDAP_TLS])
                     @ldap_start_tls($ldap);
                 if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
                     $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');

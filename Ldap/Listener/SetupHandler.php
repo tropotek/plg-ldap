@@ -2,10 +2,9 @@
 namespace Ldap\Listener;
 
 use Tk\Event\Subscriber;
+use Ldap\Plugin;
 
 /**
- * Class StartupHandler
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -22,7 +21,7 @@ class SetupHandler implements Subscriber
             $institution = \App\Db\InstitutionMap::create()->findByHash($event->getRequest()->get('instHash'));
             $config->setInstitution($institution);
         }
-        if($institution && \Ldap\Plugin::getInstance()->isZonePluginEnabled(\Ldap\Plugin::ZONE_INSTITUTION, $institution->getId())) {
+        if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
             \App\Factory::getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
     }

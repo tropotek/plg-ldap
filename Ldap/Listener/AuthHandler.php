@@ -4,6 +4,7 @@ namespace Ldap\Listener;
 use Tk\Event\Subscriber;
 use Tk\Event\AuthEvent;
 use Tk\Auth\AuthEvents;
+use Ldap\Plugin;
 
 /**
  * Class StartupHandler
@@ -25,8 +26,8 @@ class AuthHandler implements Subscriber
         $submittedData = $event->all();
         $institution = \Tk\Config::getInstance()->getInstitution();
         if (!$institution) return null;
-        $data = \Ldap\Plugin::getInstitutionData($institution);
-        if (!$data->get(\Ldap\Plugin::LDAP_ENABLE)) {
+        $data = Plugin::getInstitutionData($institution);
+        if (!$data->get(Plugin::LDAP_ENABLE)) {
             return;
         }
 

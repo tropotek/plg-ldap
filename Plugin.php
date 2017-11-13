@@ -36,7 +36,7 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * A helper method to get the Plugin instance globally
      *
-     * @return \Tk\Plugin\Iface
+     * @return static
      */
     static function getInstance()
     {
