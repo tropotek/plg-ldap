@@ -54,7 +54,7 @@ class InstitutionSettings extends Iface
         $this->data = Plugin::getInstitutionData($this->institution);
 
         $this->form = \App\Factory::createForm('formEdit');
-        $this->form->setParam('renderer', \App\Factory::createFormRenderer($this->form));
+        $this->form->setRenderer(\App\Factory::createFormRenderer($this->form));
 
         $this->form->addField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
         $this->form->addField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host');
@@ -135,7 +135,7 @@ class InstitutionSettings extends Iface
         $template = parent::show();
         
         // Render the form
-        $template->insertTemplate($this->form->getId(), $this->form->getParam('renderer')->show()->getTemplate());
+        $template->insertTemplate($this->form->getId(), $this->form->getRenderer()->show()->getTemplate());
 
         return $template;
     }
