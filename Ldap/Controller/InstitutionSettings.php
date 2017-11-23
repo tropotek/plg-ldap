@@ -63,8 +63,8 @@ class InstitutionSettings extends Iface
         $this->form->addField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')->setNotes('Base DN query. EG: `ou=people,o=organization`.');
         $this->form->addField(new Field\Input(Plugin::LDAP_FILTER))->setLabel('Ldap Filter')->setNotes('Filter to locate user EG: `uid={username}`. `{username}` will be replaced with submitted username on login.');
 
-        $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
+        $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
+        $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getSession()->getBackUrl()));
 
         $this->form->load($this->data->toArray());

@@ -54,8 +54,8 @@ class SystemSettings extends Iface
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
         
-        $this->form->addField(new Event\Button('update', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Button('save', array($this, 'doSubmit')));
+        $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
+        $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getSession()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
