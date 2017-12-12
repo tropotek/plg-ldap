@@ -7,6 +7,7 @@ $config = \Tk\Config::getInstance();
 
 
 /** @var \Tk\Routing\RouteCollection $routes */
+$config = \Tk\Config::getInstance();
 $routes = $config['site.routes'];
 
 $params = array('role' => 'admin');
