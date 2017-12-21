@@ -15,14 +15,14 @@ class SetupHandler implements Subscriber
 
     public function onRequest(\Tk\Event\GetResponseEvent $event)
     {
-        $config = \Tk\Config::getInstance();
-        $institution = \App\Factory::getInstitution();
+        $config = \Uni\Config::getInstance();
+        $institution = $config->getInstitution();
         if (!$institution && $event->getRequest()->has('instHash')) {
             $institution = \App\Db\InstitutionMap::create()->findByHash($event->getRequest()->get('instHash'));
             $config->setInstitution($institution);
         }
         if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
-            \App\Factory::getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
+            $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
     }
 

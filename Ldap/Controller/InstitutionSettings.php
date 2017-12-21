@@ -5,7 +5,7 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use App\Controller\Iface;
+use Uni\Controller\Iface;
 use Ldap\Plugin;
 
 /**
@@ -46,6 +46,7 @@ class InstitutionSettings extends Iface
      * doDefault
      *
      * @param Request $request
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
@@ -53,8 +54,8 @@ class InstitutionSettings extends Iface
         $this->institution = \App\Db\InstitutionMap::create()->find($request->get('zoneId'));
         $this->data = Plugin::getInstitutionData($this->institution);
 
-        $this->form = \App\Factory::createForm('formEdit');
-        $this->form->setRenderer(\App\Factory::createFormRenderer($this->form));
+        $this->form = \Uni\Config::createForm('formEdit');
+        $this->form->setRenderer(\Uni\Config::createFormRenderer($this->form));
 
         $this->form->addField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
         $this->form->addField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host');
@@ -65,7 +66,7 @@ class InstitutionSettings extends Iface
 
         $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getSession()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -120,7 +121,7 @@ class InstitutionSettings extends Iface
 
         \Tk\Alert::addSuccess('LDAP Settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \App\Factory::getSession()->getBackUrl()->redirect();
+            $this->getConfig()->getSession()->getBackUrl()->redirect();
         }
         \Tk\Uri::create()->redirect();
     }

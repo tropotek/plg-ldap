@@ -5,8 +5,6 @@ use Tk\Event\Dispatcher;
 
 
 /**
- * Class Plugin
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
@@ -124,10 +122,11 @@ class Plugin extends \Tk\Plugin\Iface
      * Will only be called when deactivating the plugin in the
      * plugin control panel
      *
+     * @throws \Tk\Db\Exception
      */
     function doDeactivate()
     {
-        $db = \App\Factory::getDb();
+        $db = \Uni\Config::getInstance()->getDb();
 
         // Clear the data table of all plugin data
         $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('fkey'),

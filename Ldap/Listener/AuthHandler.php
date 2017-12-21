@@ -24,7 +24,7 @@ class AuthHandler implements Subscriber
     {
         $result = null;
         $submittedData = $event->all();
-        $institution = \Tk\Config::getInstance()->getInstitution();
+        $institution = \Uni\Config::getInstance()->getInstitution();
         if (!$institution) return null;
         $data = Plugin::getInstitutionData($institution);
         if (!$data->get(Plugin::LDAP_ENABLE)) {

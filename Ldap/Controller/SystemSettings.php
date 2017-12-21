@@ -5,7 +5,7 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use App\Controller\Iface;
+use Uni\Controller\Iface;
 use Ldap\Plugin;
 
 
@@ -45,18 +45,19 @@ class SystemSettings extends Iface
      * doDefault
      *
      * @param Request $request
+     * @throws \Tk\Exception
      */
     public function doDefault(Request $request)
     {
-        $this->form = \App\Factory::createForm('formEdit');
-        $this->form->setRenderer(\App\Factory::createFormRenderer($this->form));
+        $this->form = \Uni\Config::createForm('formEdit');
+        $this->form->setRenderer(\Uni\Config::createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
         
         $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', \App\Factory::getSession()->getBackUrl()));
+        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
 
         $this->form->load($this->data->toArray());
         $this->form->execute();
@@ -88,7 +89,7 @@ class SystemSettings extends Iface
         
         \Tk\Alert::addSuccess('Site settings saved.');
         if ($form->getTriggeredEvent()->getName() == 'update') {
-            \App\Factory::getSession()->getBackUrl()->redirect();
+            $this->getConfig()->getSession()->getBackUrl()->redirect();
         }
         \Tk\Uri::create()->redirect();
     }
