@@ -34,28 +34,28 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * A helper method to get the Plugin instance globally
      *
-     * @return static
+     * @return static|\Tk\Plugin\Iface
      */
     static function getInstance()
     {
-        return \Tk\Config::getInstance()->getPluginFactory()->getPlugin('ems-ldap');
+        return \Uni\Config::getInstance()->getPluginFactory()->getPlugin('ems-ldap');
     }
 
     /**
-     * @return \App\PluginApi
+     * @return \Uni\PluginApi
      */
     public static function getPluginApi()
     {
-        return \Tk\Config::getInstance()->getPluginApi();
+        return \Uni\Config::getInstance()->getPluginApi();
     }
 
     /**
-     * @param \App\Db\Institution $institution
+     * @param \Uni\Db\InstitutionIface $institution
      * @return \Tk\Db\Data
      */
     public static function getInstitutionData($institution)
     {
-        \Tk\Config::getInstance()->setInstitution($institution);
+        \Uni\Config::getInstance()->setInstitution($institution);
         return self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
     }
 

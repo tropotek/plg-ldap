@@ -24,6 +24,7 @@ class AuthHandler implements Subscriber
     {
         $result = null;
         $submittedData = $event->all();
+        /** @var \Uni\Db\InstitutionIface $institution */
         $institution = \Uni\Config::getInstance()->getInstitution();
         if (!$institution) return null;
         $data = Plugin::getInstitutionData($institution);
