@@ -46,7 +46,9 @@ class InstitutionSettings extends Iface
      * doDefault
      *
      * @param Request $request
-     * @throws \Tk\Exception
+     * @throws Form\Exception
+     * @throws \Exception
+     * @throws \Tk\Db\Exception
      */
     public function doDefault(Request $request)
     {

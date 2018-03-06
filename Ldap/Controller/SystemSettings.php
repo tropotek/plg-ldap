@@ -45,7 +45,8 @@ class SystemSettings extends Iface
      * doDefault
      *
      * @param Request $request
-     * @throws \Tk\Exception
+     * @throws Form\Exception
+     * @throws \Exception
      */
     public function doDefault(Request $request)
     {
