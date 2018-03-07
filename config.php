@@ -9,6 +9,7 @@ $config = \Tk\Config::getInstance();
 /** @var \Tk\Routing\RouteCollection $routes */
 $config = \Tk\Config::getInstance();
 $routes = $config['site.routes'];
+if (!$routes) return;
 
 $params = array('role' => 'admin');
 $routes->add('LDAP Admin Settings', new \Tk\Routing\Route('/ldap/adminSettings.html', 'Ldap\Controller\SystemSettings::doDefault', $params));
