@@ -1,6 +1,6 @@
 # EMS III LDAP Plugin
 
-__Project:__ [ttek-plg/ldap](http://packagist.org/packages/ttek-plg/ldap)  
+__Project:__ [ttek-plg/plg-ldap](http://packagist.org/packages/ttek-plg/plg-ldap)  
 __Published:__ 01 Sep 2016
 __Web:__ <http://www.tropotek.com/>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
@@ -15,18 +15,18 @@ An ldap Plugin for the new EMS III System. Use this to create your own plugins.
 
 ## Installation
 
-Available on Packagist ([ttek-plg/ldap](http://packagist.org/packages/ttek-plg/ldap))
+Available on Packagist ([ttek-plg/plg-ldap](http://packagist.org/packages/ttek-plg/plg-ldap))
 and as such installable via [Composer](http://getcomposer.org/).
 
 ```bash
-# composer require ttek-plg/ldap
+# composer require ttek-plg/plg-ldap
 ```
 
 Or add the following to your composer.json file:
 
 ```json
 {
-  "ttek-plg/ldap": "~1.0"
+  "ttek-plg/plg-ldap": "~1.0"
 }
 ```
 
