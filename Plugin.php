@@ -38,7 +38,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     static function getInstance()
     {
-        return \Uni\Config::getInstance()->getPluginFactory()->getPlugin('ems-ldap');
+        return \Uni\Config::getInstance()->getPluginFactory()->getPlugin('plg-ldap');
     }
 
     /**
