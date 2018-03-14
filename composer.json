@@ -1,7 +1,7 @@
 {
-    "name": "ttek-plg/ems-ldap",
+    "name": "ttek-plg/plg-ldap",
     "type": "ttek-plugin",
-    "description": "LDAP Plugin for the EMS III",
+    "description": "LDAP Plugin for the tk-uni lib",
     "keywords":  [
         "tropotek",
         "plugin",
@@ -26,10 +26,12 @@
     },
     "extra":  {
         "branch-alias":  {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     },
     "require":  {
+        "ttek/tk-framework": "~2.0",
+        "ttek/tk-uni": "~2.0",
         "ttek/tk-installers": "~2.0"
     }
 }
