@@ -13,8 +13,8 @@ class Plugin extends \Tk\Plugin\Iface
 {
 
     const ZONE_INSTITUTION = 'institution';
-    const ZONE_COURSE_PROFILE = 'profile';
-    const ZONE_COURSE = 'course';
+    const ZONE_SUBJECT_PROFILE = 'profile';
+    const ZONE_SUBJECT = 'subject';
 
     // data labels
     const LDAP_ENABLE = 'inst.ldap.enable';
@@ -135,7 +135,7 @@ class Plugin extends \Tk\Plugin\Iface
     }
 
     /**
-     * Get the course settings URL, if null then there is none
+     * Get the settings URL, if null then there is none
      *
      * @return string|\Tk\Uri|null
      */
