@@ -82,6 +82,10 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
                 'institutionId' => $this->institution->getId(),
                 'username' => $username,
                 'email' => $ldapData[0]['mail'][0],
+
+                // TODO: This could be an alias email array here, to help with enrolling staff and students...
+                'emailsAlias' => array(),
+
                 'role' => $role,
                 'password' => $password,
                 'name' => $ldapData[0]['displayname'][0],
