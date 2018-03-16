@@ -27,6 +27,7 @@ class AuthHandler implements Subscriber
         /** @var \Uni\Db\InstitutionIface $institution */
         $institution = \Uni\Config::getInstance()->getInstitution();
 
+        //TODO: We need to lookinto why I can login through the fvas-ems site with my institution LDAP account????
         vd(\App\Config::getInstance()->getRequest()->getAttributes());
 
         if (!$institution) return null;
