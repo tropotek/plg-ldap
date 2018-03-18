@@ -5,8 +5,6 @@ use Ldap\Plugin;
 use Tk\Auth\Result;
 
 /**
- * LDAP Authentication adapter
- *
  * This adapter requires that the data values have been set
  * ```
  * $adapter->replace(array('username' => $value, 'password' => $password));
@@ -82,29 +80,17 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
                 'institutionId' => $this->institution->getId(),
                 'username' => $username,
                 'email' => $ldapData[0]['mail'][0],
-
-                // TODO: This could be an alias email array here, to help with enrolling staff and students...
-                'emailsAlias' => array(),
-
                 'role' => $role,
                 'password' => $password,
                 'name' => $ldapData[0]['displayname'][0],
                 'active' => true,
-                'uid' => $ldapData[0]['auedupersonid'][0]
+                'uid' => $ldapData[0]['auedupersonid'][0],
+                'ldapData' => $ldapData
             );
             $user = Plugin::getPluginApi()->createUser($params);
         } else {
-            // TODO: Not updating user details to avoid SQL integrity issues .. Figure a solution???
-            // TODO: Maybe wwe check the db for uniqueness before updating these fields
-            // Update User info if record already exists
-//            $user->username = $username;
-            // This has potential to cause conflicts
-//            if (!empty($ldapData[0]['mail'][0]))
-//                $user->email = $ldapData[0]['mail'][0];
-
             if (!empty($ldapData[0]['auedupersonid'][0]))
                 $user->uid = $ldapData[0]['auedupersonid'][0];
-
             $user->setNewPassword($password);
             $user->save();
         }

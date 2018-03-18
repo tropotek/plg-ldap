@@ -7,8 +7,6 @@ use Tk\Auth\AuthEvents;
 use Ldap\Plugin;
 
 /**
- * Class StartupHandler
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @link http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
@@ -26,9 +24,6 @@ class AuthHandler implements Subscriber
         $submittedData = $event->all();
         /** @var \Uni\Db\InstitutionIface $institution */
         $institution = \Uni\Config::getInstance()->getInstitution();
-
-        //TODO: We need to lookinto why I can login through the fvas-ems site with my institution LDAP account????
-        vd(\App\Config::getInstance()->getRequest()->getAttributes());
 
         if (!$institution) return null;
         $data = Plugin::getInstitutionData($institution);
