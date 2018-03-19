@@ -69,6 +69,7 @@ class SystemSettings extends Iface
      * doSubmit()
      *
      * @param Form $form
+     * @throws \Tk\Db\Exception
      */
     public function doSubmit($form)
     {

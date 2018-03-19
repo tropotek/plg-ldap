@@ -17,6 +17,9 @@ class AuthHandler implements Subscriber
     /**
      * @param AuthEvent $event
      * @return null|void
+     * @throws \Tk\Auth\Exception
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Plugin\Exception
      */
     public function onLogin(AuthEvent $event)
     {

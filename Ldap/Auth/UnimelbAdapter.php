@@ -23,6 +23,8 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
      * Constructor
      *
      * @param \Uni\Db\InstitutionIface $institution
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Plugin\Exception
      */
     public function __construct($institution)
     {
@@ -37,7 +39,6 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
      * Authenticate the user
      *
      * @return Result
-     * @throws \Tk\Auth\Exception
      * @throws \Tk\Exception
      */
     public function authenticate()

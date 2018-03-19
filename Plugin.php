@@ -35,6 +35,8 @@ class Plugin extends \Tk\Plugin\Iface
      * A helper method to get the Plugin instance globally
      *
      * @return static|\Tk\Plugin\Iface
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Plugin\Exception
      */
     static function getInstance()
     {
@@ -52,6 +54,8 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * @param \Uni\Db\InstitutionIface $institution
      * @return \Tk\Db\Data
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Plugin\Exception
      */
     public static function getInstitutionData($institution)
     {
@@ -64,6 +68,8 @@ class Plugin extends \Tk\Plugin\Iface
      *
      * @param $institution
      * @return bool
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Plugin\Exception
      */
     public static function isEnabled($institution)
     {
@@ -137,6 +143,7 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * Get the settings URL, if null then there is none
      *
+     * @param $zoneName
      * @return string|\Tk\Uri|null
      */
     public function getZoneSettingsUrl($zoneName)
