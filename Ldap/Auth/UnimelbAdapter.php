@@ -89,6 +89,11 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
                 'ldapData' => $ldapData
             );
             $user = Plugin::getPluginApi()->createUser($params);
+            if (!$user) {       // If user is null here it is assumed that we are not allowed to create users automatically
+                return new Result(Result::FAILURE_CREDENTIAL_INVALID, $username, 'Invalid user account. Please contact your administrator.');
+            }
+
+
         } else {
             if (!empty($ldapData[0]['auedupersonid'][0]))
                 $user->uid = $ldapData[0]['auedupersonid'][0];
