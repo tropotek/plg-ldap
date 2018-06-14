@@ -32,7 +32,7 @@ class UnimelbAdapter extends \Tk\Auth\Adapter\Ldap
 
         $data = Plugin::getInstitutionData($institution);
         parent::__construct($data->get(Plugin::LDAP_HOST), $data->get(Plugin::LDAP_BASE_DN),
-            $data->get(Plugin::LDAP_FILTER), (int)$data->get(Plugin::LDAP_PORT), $data->get(Plugin::LDAP_TLS));
+            (int)$data->get(Plugin::LDAP_PORT), $data->get(Plugin::LDAP_TLS));
     }
 
     /**

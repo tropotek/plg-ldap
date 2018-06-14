@@ -60,11 +60,11 @@ class InstitutionSettings extends Iface
         $this->form->setRenderer(\Uni\Config::createFormRenderer($this->form));
 
         $this->form->addField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
-        $this->form->addField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host');
-        $this->form->addField(new Field\Checkbox(Plugin::LDAP_TLS))->setLabel('LDAP TLS');
-        $this->form->addField(new Field\Input(Plugin::LDAP_PORT))->setLabel('LDAP Port');
-        $this->form->addField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')->setNotes('Base DN query. EG: `ou=people,o=organization`.');
-        $this->form->addField(new Field\Input(Plugin::LDAP_FILTER))->setLabel('Ldap Filter')->setNotes('Filter to locate user EG: `uid={username}`. `{username}` will be replaced with submitted username on login.');
+        $this->form->addField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host')->setNotes('EG: ldaps://server.unimelb.edu.au');
+        //$this->form->addField(new Field\Checkbox(Plugin::LDAP_TLS))->setLabel('LDAP TLS');
+        $this->form->addField(new Field\Input(Plugin::LDAP_PORT))->setLabel('LDAP Port')->setValue('636');
+        $this->form->addField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')->setNotes('Base DN query. EG: `uid=%s,ou=people,o=organization`.');
+        //$this->form->addField(new Field\Input(Plugin::LDAP_FILTER))->setLabel('Ldap Filter')->setNotes('Filter to locate user EG: `uid={username}`. `{username}` will be replaced with submitted username on login.');
 
         $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));

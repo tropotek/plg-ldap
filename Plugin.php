@@ -19,9 +19,10 @@ class Plugin extends \Tk\Plugin\Iface
     // data labels
     const LDAP_ENABLE = 'inst.ldap.enable';
     const LDAP_HOST = 'inst.ldap.host';
-    const LDAP_TLS = 'inst.ldap.tls';
     const LDAP_PORT = 'inst.ldap.port';
     const LDAP_BASE_DN = 'inst.ldap.baseDn';
+
+    const LDAP_TLS = 'inst.ldap.tls';
     const LDAP_FILTER = 'inst.ldap.filter';
 
 
