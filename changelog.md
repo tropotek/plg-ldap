@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.4 [2018-06-14]:
+-------------------------------
+Updated LDAP plugin
+
+
 Ver 2.0.2 [2018-05-22]:
 -------------------------------
  - Fixed Enrollment issue
