@@ -53,7 +53,6 @@ class AuthHandler implements Subscriber
         $auth = $this->getConfig()->getAuth();
         $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.????
 
-        //$adapter = new \Ldap\Auth\UnimelbAdapter($institution);
         $adapter = new \Tk\Auth\Adapter\Ldap($hostUri, $baseDn, $port);
         $adapter->replace($formData);
         $result = $auth->authenticate($adapter);
