@@ -39,7 +39,7 @@ class AuthHandler implements Subscriber
         //  so this can stay here for now as we will only be using LDAP in an institution environment.
 
         $institution = $this->getConfig()->getInstitution();
-        if (!$institution) return null;
+        if (!$institution) return;
         $data = Plugin::getInstitutionData($institution);
         $hostUri = $data->get(Plugin::LDAP_HOST);
         $port = (int)$data->get(Plugin::LDAP_PORT);
