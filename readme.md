@@ -1,11 +1,11 @@
-# EMS III LDAP Plugin
+# UNI LDAP Plugin
 
 __Project:__ [ttek-plg/plg-ldap](http://packagist.org/packages/ttek-plg/plg-ldap)  
 __Published:__ 01 Sep 2016
 __Web:__ <http://www.tropotek.com/>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
   
-An ldap Plugin for the new EMS III System. Use this to create your own plugins.
+An ldap Plugin for the new tk-uni libs.
 
 ## Contents
 
