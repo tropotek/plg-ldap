@@ -56,11 +56,12 @@ class Plugin extends \Tk\Plugin\Iface
      * @param \Uni\Db\InstitutionIface $institution
      * @return \Tk\Db\Data
      * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
      * @throws \Tk\Plugin\Exception
      */
     public static function getInstitutionData($institution)
     {
-        \Uni\Config::getInstance()->setInstitution($institution);
+        \Tk\Config::getInstance()->setInstitution($institution);
         return self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
     }
 
@@ -70,6 +71,7 @@ class Plugin extends \Tk\Plugin\Iface
      * @param $institution
      * @return bool
      * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
      * @throws \Tk\Plugin\Exception
      */
     public static function isEnabled($institution)
@@ -96,7 +98,7 @@ class Plugin extends \Tk\Plugin\Iface
     {
         // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
-
+        /** @var \App\Config $config */
         $config = $this->getConfig();
         $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
 
@@ -105,13 +107,14 @@ class Plugin extends \Tk\Plugin\Iface
         $dispatcher->addSubscriber(new \Ldap\Listener\SetupHandler());
 
     }
-    
+
     /**
      * Activate the plugin, essentially
      * installing any DB and settings required to run
      * Will only be called when activating the plugin in the
      * plugin control panel
      *
+     * @throws \Tk\Db\Exception
      */
     function doActivate()
     {
@@ -119,8 +122,6 @@ class Plugin extends \Tk\Plugin\Iface
 
         // Init Settings
         $data = \Tk\Db\Data::create($this->getName());
-//        $data->set('plugin.title', 'EMS III Ldap Plugin');
-//        $data->set('plugin.email', 'null@unimelb.edu.au');
         $data->save();
     }
 
