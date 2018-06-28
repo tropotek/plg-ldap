@@ -47,10 +47,10 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * @return \Uni\PluginApi
      */
-    public static function getPluginApi()
-    {
-        return \Uni\Config::getInstance()->getPluginApi();
-    }
+//    public static function getPluginApi()
+//    {
+//        return \Uni\Config::getInstance()->getPluginApi();
+//    }
 
     /**
      * @param \Uni\Db\InstitutionIface $institution
