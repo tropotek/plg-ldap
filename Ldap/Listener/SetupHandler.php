@@ -12,14 +12,20 @@ use Ldap\Plugin;
 class SetupHandler implements Subscriber
 {
 
-
+    /**
+     * @param \Tk\Event\GetResponseEvent $event
+     * @throws \Tk\Db\Exception
+     * @throws \Tk\Exception
+     * @throws \Tk\Plugin\Exception
+     */
     public function onRequest(\Tk\Event\GetResponseEvent $event)
     {
-        $config = \Uni\Config::getInstance();
+        $config = \App\Config::getInstance();
         $institution = $config->getInstitution();
         if (!$institution && $event->getRequest()->has('instHash')) {
             $institution = \App\Db\InstitutionMap::create()->findByHash($event->getRequest()->get('instHash'));
-            $config->setInstitution($institution);
+            $config->set('institution', $institution);
+            //$config->setInstitution($institution);
         }
         if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
             $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());

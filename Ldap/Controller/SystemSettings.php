@@ -5,7 +5,6 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use Uni\Controller\Iface;
 use Ldap\Plugin;
 
 
@@ -15,7 +14,7 @@ use Ldap\Plugin;
  * @license Copyright 2015 Michael Mifsud
  * @deprecated Not implemented...
  */
-class SystemSettings extends Iface
+class SystemSettings extends \Bs\Controller\AdminIface
 {
 
     /**

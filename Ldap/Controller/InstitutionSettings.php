@@ -5,7 +5,6 @@ use Tk\Request;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use Uni\Controller\Iface;
 use Ldap\Plugin;
 
 /**
@@ -15,7 +14,7 @@ use Ldap\Plugin;
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class InstitutionSettings extends Iface
+class InstitutionSettings extends \Bs\Controller\AdminIface
 {
 
     /**
@@ -80,9 +79,10 @@ class InstitutionSettings extends Iface
      * doSubmit()
      *
      * @param Form $form
+     * @param \Tk\Form\Event\Iface $event
      * @throws \Tk\Db\Exception
      */
-    public function doSubmit($form)
+    public function doSubmit($form, $event)
     {
         $values = $form->getValues();
         $this->data->replace($values);
@@ -118,10 +118,10 @@ class InstitutionSettings extends Iface
         $this->data->save();
 
         \Tk\Alert::addSuccess('LDAP Settings saved.');
-        if ($form->getTriggeredEvent()->getName() == 'update') {
-            $this->getConfig()->getSession()->getBackUrl()->redirect();
+        $event->setRedirect($this->getConfig()->getBackUrl());
+        if ($form->getTriggeredEvent()->getName() == 'save') {
+            $event->setRedirect(\Tk\Uri::create());
         }
-        \Tk\Uri::create()->redirect();
     }
 
     /**
@@ -148,12 +148,6 @@ class InstitutionSettings extends Iface
     {
         $xhtml = <<<XHTML
 <div var="content">
-  <div class="panel panel-default">
-    <div class="panel-heading"><i class="fa fa-cogs fa-fw"></i> Actions</div>
-    <div class="panel-body " var="action-panel">
-      <a href="javascript: window.history.back();" class="btn btn-default"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
-    </div>
-  </div>
   
   <div class="panel panel-default">
     <div class="panel-heading"><i class="fa fa-cog"></i> LDAP Settings</div>

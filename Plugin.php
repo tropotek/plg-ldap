@@ -61,7 +61,9 @@ class Plugin extends \Tk\Plugin\Iface
      */
     public static function getInstitutionData($institution)
     {
-        \Tk\Config::getInstance()->setInstitution($institution);
+        // TODO: this may not be the best position for this
+        \App\Config::getInstance()->set('institution', $institution);
+
         return self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
     }
 
