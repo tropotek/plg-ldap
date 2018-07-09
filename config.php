@@ -1,15 +1,13 @@
 <?php
-$config = \Tk\Config::getInstance();
 
-// NOTE:
-// You must manually include all required php files if you are not using composer to install the plugin.
-// Alternatively be sure to use the plugin namespace for all classes such as \Ems\MyClass
-
-
-/** @var \Tk\Routing\RouteCollection $routes */
-$config = \Tk\Config::getInstance();
-$routes = $config['site.routes'];
+$config = \App\Config::getInstance();
+$routes = $config->getRouteCollection();
 if (!$routes) return;
+
+/** @var \Composer\Autoload\ClassLoader $composer */
+$composer = $config->getComposer();
+if ($composer)
+    $composer->add('Ldap\\', dirname(__FILE__));
 
 $params = array('role' => 'admin');
 $routes->add('LDAP Admin Settings', new \Tk\Routing\Route('/ldap/adminSettings.html', 'Ldap\Controller\SystemSettings::doDefault', $params));
