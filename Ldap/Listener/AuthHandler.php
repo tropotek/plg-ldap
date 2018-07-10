@@ -56,6 +56,13 @@ class AuthHandler implements Subscriber
         $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.????
 
         $adapter = new \Tk\Auth\Adapter\Ldap($hostUri, $baseDn, $port);
+
+        // TODO: This can be remove if no longer needed
+        if ($this->getConfig()->isDebug()) {
+            \Tk\Log::warning('Mocking the LDAP adapter');
+            $adapter = new \Ldap\MockAdapter($hostUri, $baseDn, $port);
+        }
+
         $adapter->replace($formData);
         $result = $auth->authenticate($adapter);
 
