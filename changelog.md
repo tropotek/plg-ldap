@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.16 [2018-07-11]:
+-------------------------------
+Added config option for LDAP mocking instead of using isDebug()
+
+
 Ver 2.0.14 [2018-07-11]:
 -------------------------------
 Finally found the issue with the LDAP adapter and login
