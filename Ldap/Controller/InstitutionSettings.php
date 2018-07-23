@@ -47,16 +47,15 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
      * @param Request $request
      * @throws Form\Exception
      * @throws \Exception
-     * @throws \Tk\Db\Exception
      */
     public function doDefault(Request $request)
     {
 
-        $this->institution = \App\Db\InstitutionMap::create()->find($request->get('zoneId'));
+        $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->get('zoneId'));
         $this->data = Plugin::getInstitutionData($this->institution);
 
-        $this->form = \Uni\Config::createForm('formEdit');
-        $this->form->setRenderer(\Uni\Config::createFormRenderer($this->form));
+        $this->form = $this->getConfig()->createForm('formEdit');
+        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')
             ->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');

@@ -30,8 +30,7 @@ class SystemSettings extends \Bs\Controller\AdminIface
 
     /**
      * SystemSettings constructor.
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Plugin\Exception
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -51,8 +50,8 @@ class SystemSettings extends \Bs\Controller\AdminIface
      */
     public function doDefault(Request $request)
     {
-        $this->form = \Uni\Config::createForm('formEdit');
-        $this->form->setRenderer(\Uni\Config::createFormRenderer($this->form));
+        $this->form = $this->getConfig()->createForm('formEdit');
+        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
 
         $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
         $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
@@ -70,7 +69,7 @@ class SystemSettings extends \Bs\Controller\AdminIface
      * doSubmit()
      *
      * @param Form $form
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     public function doSubmit($form)
     {

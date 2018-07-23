@@ -15,13 +15,14 @@ $routes = $config->getRouteCollection();
 if (!$routes) return;
 
 
-$params = array('role' => 'admin');
-$routes->add('LDAP Admin Settings', new \Tk\Routing\Route('/ldap/adminSettings.html',
-    'Ldap\Controller\SystemSettings::doDefault', $params));
+
+$routes->add('ldap-admin-settings', new \Tk\Routing\Route('/admin/ldapSettings.html', 'Ldap\Controller\SystemSettings::doDefault'));
+
+$routes->add('ldap-admin-institution-settings', new \Tk\Routing\Route('/admin/ldapInstitutionSettings.html', 'Ldap\Controller\InstitutionSettings::doDefault'));
+$routes->add('ldap-client-institution-settings', new \Tk\Routing\Route('/client/ldapInstitutionSettings.html', 'Ldap\Controller\InstitutionSettings::doDefault'));
 
 
-$params = array('role' => array('admin', 'client'));
-$routes->add('LDAP Institution Settings', new \Tk\Routing\Route('/ldap/institutionSettings.html',
-    'Ldap\Controller\InstitutionSettings::doDefault', $params));
+
+
 
 

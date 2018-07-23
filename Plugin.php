@@ -45,19 +45,9 @@ class Plugin extends \Tk\Plugin\Iface
     }
 
     /**
-     * @return \Uni\PluginApi
-     */
-//    public static function getPluginApi()
-//    {
-//        return \Uni\Config::getInstance()->getPluginApi();
-//    }
-
-    /**
-     * @param \Uni\Db\InstitutionIface $institution
+     * @param \Uni\Db\Institution $institution
      * @return \Tk\Db\Data
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
-     * @throws \Tk\Plugin\Exception
+     * @throws \Exception
      */
     public static function getInstitutionData($institution)
     {
@@ -72,9 +62,7 @@ class Plugin extends \Tk\Plugin\Iface
      *
      * @param $institution
      * @return bool
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
-     * @throws \Tk\Plugin\Exception
+     * @throws \Exception
      */
     public static function isEnabled($institution)
     {
@@ -116,7 +104,7 @@ class Plugin extends \Tk\Plugin\Iface
      * Will only be called when activating the plugin in the
      * plugin control panel
      *
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     function doActivate()
     {
@@ -132,7 +120,7 @@ class Plugin extends \Tk\Plugin\Iface
      * Will only be called when deactivating the plugin in the
      * plugin control panel
      *
-     * @throws \Tk\Db\Exception
+     * @throws \Exception
      */
     function doDeactivate()
     {
@@ -154,7 +142,7 @@ class Plugin extends \Tk\Plugin\Iface
     {
         switch ($zoneName) {
             case self::ZONE_INSTITUTION:
-                return \Tk\Uri::create('/ldap/institutionSettings.html');
+                return \Bs\Uri::createHomeUrl('/ldapInstitutionSettings.html');
         }
         return null;
     }
