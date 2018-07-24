@@ -1,5 +1,9 @@
 #CHANGELOG#
 
+Ver 2.0.18 [2018-07-24]:
+-------------------------------
+
+
 Ver 2.0.16 [2018-07-11]:
 -------------------------------
 Added config option for LDAP mocking instead of using isDebug()
