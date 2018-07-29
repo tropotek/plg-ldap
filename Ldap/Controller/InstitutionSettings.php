@@ -23,7 +23,7 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
     protected $form = null;
 
     /**
-     * @var \App\Db\Institution
+     * @var \Uni\Db\Institution
      */
     protected $institution = null;
 

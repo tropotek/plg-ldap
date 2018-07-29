@@ -23,7 +23,7 @@ class SetupHandler implements Subscriber
         $config = \App\Config::getInstance();
         $institution = $config->getInstitution();
         if (!$institution && $event->getRequest()->has('instHash')) {
-            $institution = \App\Db\InstitutionMap::create()->findByHash($event->getRequest()->get('instHash'));
+            $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
             $config->set('institution', $institution);
             //$config->setInstitution($institution);
         }
