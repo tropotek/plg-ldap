@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 2.0.22 [2018-07-31]:
+-------------------------------
+  - Fixed the LDAP and LTI implementations.
+
+
 Ver 2.0.20 [2018-07-30]:
 -------------------------------
   - Fixed invalid LDAP institution call in plugin
