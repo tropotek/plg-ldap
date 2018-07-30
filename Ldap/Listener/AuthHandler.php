@@ -55,7 +55,7 @@ class AuthHandler implements Subscriber
         $adapter = new \Tk\Auth\Adapter\Ldap($hostUri, $baseDn, $port);
         // Use this to test the LDAP adaper and users
         if ($this->getConfig()->get('ldap.adapter.mock')) {
-            \Tk\Log::warning('Mocking the LDAP adapter');
+            \Tk\Log::info('!!! Mocking the LDAP adapter !!!');
             $adapter = new \Ldap\MockAdapter($hostUri, $baseDn, $port);
         }
 
@@ -64,6 +64,27 @@ class AuthHandler implements Subscriber
 
         $event->setResult($result);
         $event->set('auth.password.access', false);   // Can modify their own password
+
+    }
+
+    /**
+     * @param \Tk\Event\TableEvent $event
+     * @return null|void
+     * @throws \Exception
+     */
+    public function onMockAdapter(\Tk\Event\TableEvent $event)
+    {
+        if (!$this->getConfig()->get('ldap.adapter.mock')) return;
+        if (!in_array('tk-pending-users', $event->getTable()->getCssList())) return;
+
+        $event->getTable()->addCell(new \Tk\Table\Cell\Text('ldap'))->setLabel('LDAP')
+            ->setOnPropertyValue(function ($cell, $obj, $val) {
+                $u = '';
+                if ($obj->email) {
+                    list($u, $d) = explode('@', $obj->email);
+                }
+                return str_replace('-', '_', $u).'-'.$obj->uid;
+            });
 
     }
 
@@ -91,7 +112,8 @@ class AuthHandler implements Subscriber
     public static function getSubscribedEvents()
     {
         return array(
-            AuthEvents::LOGIN => array('onLogin', 10)   // execute this handler before the app auth handlers
+            AuthEvents::LOGIN => array('onLogin', 10),   // execute this handler before the app auth handlers
+            \Tk\Table\TableEvents::TABLE_INIT => array('onMockAdapter', 0)
         );
     }
 

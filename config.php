@@ -2,8 +2,8 @@
 
 $config = \App\Config::getInstance();
 
-
-$config->set('ldap.adapter.mock', false);
+if (!$config->get('ldap.adapter.mock'))
+    $config->set('ldap.adapter.mock', false);
 
 
 /** @var \Composer\Autoload\ClassLoader $composer */
