@@ -56,7 +56,7 @@ class AuthHandler implements Subscriber
         // Use this to test the LDAP adaper and users
         if ($this->getConfig()->get('ldap.adapter.mock')) {
             \Tk\Log::info('!!! Mocking the LDAP adapter !!!');
-            $adapter = new \Ldap\MockAdapter($hostUri, $baseDn, $port);
+            $adapter = new \Ldap\Auth\MockAdapter($hostUri, $baseDn, $port);
         }
 
         $adapter->replace($formData);

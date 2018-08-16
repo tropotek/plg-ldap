@@ -4,7 +4,8 @@
  * @see http://www.tropotek.com/
  * @license Copyright 2007 Michael Mifsud
  */
-namespace Ldap;
+namespace Ldap\Auth;
+
 use Tk\Auth\Result;
 
 /**
@@ -50,11 +51,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
      */
     public function __construct($host, $baseDn, $port = 636, $tls = false)
     {
-        $this->setHost($host);
-        $this->setBaseDn($baseDn);
-        if ($port <= 0) $port = 636;
-        $this->setPort($port);
-        $this->setTls($tls);
+        parent::__construct($host, $baseDn, $port);
     }
 
 
