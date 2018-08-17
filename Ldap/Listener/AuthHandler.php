@@ -85,7 +85,6 @@ class AuthHandler implements Subscriber
                 }
                 return str_replace('-', '_', $u).'-'.$obj->uid;
             });
-
     }
 
 
