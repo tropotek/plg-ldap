@@ -14,9 +14,7 @@ class SetupHandler implements Subscriber
 
     /**
      * @param \Tk\Event\GetResponseEvent $event
-     * @throws \Tk\Db\Exception
-     * @throws \Tk\Exception
-     * @throws \Tk\Plugin\Exception
+     * @throws \Exception
      */
     public function onRequest(\Tk\Event\GetResponseEvent $event)
     {

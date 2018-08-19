@@ -77,7 +77,7 @@ class AuthHandler implements Subscriber
         if (!$this->getConfig()->get('ldap.adapter.mock')) return;
         if (!in_array('tk-pending-users', $event->getTable()->getCssList())) return;
 
-        $event->getTable()->addCell(new \Tk\Table\Cell\Text('ldap'))->setLabel('LDAP')
+        $event->getTable()->appendCell(new \Tk\Table\Cell\Text('ldap'))->setLabel('LDAP')
             ->setOnPropertyValue(function ($cell, $obj, $val) {
                 $u = '';
                 if ($obj->email) {
