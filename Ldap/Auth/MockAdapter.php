@@ -65,13 +65,15 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
     {
         $this->username = $this->get('username');
         $this->password = $this->get('password');
+
         if (preg_match('/([a-z0-9\._]+)-([0-9]+)/', $this->username, $regs)) {
             $this->username = $regs[1];
-            $this->set('username', $this->username);
             $this->uid = $regs[2];
         } else {
-            throw new \Tk\Exception('LdapMock: Server Error: Please contact system administrator.');
+            $this->set('username', $this->username);
+            //throw new \Tk\Exception('LdapMock: Server Error: Please contact system administrator.');
         }
+        $this->set('username', $this->username);
 
         if (!$this->username || !$this->password) {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->username, '0000 Invalid username or password.');
@@ -81,20 +83,16 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
 //            $this->ldap = @ldap_connect($this->getHost(), $this->getPort());
 //            if ($this->isTls())
 //                @ldap_start_tls($this->getLdap());
+
             $this->setBaseDn(sprintf($this->getBaseDn(), $this->username));
             // legacy check (remove in future versions)
             $this->setBaseDn(str_replace('{username}', $this->username, $this->getBaseDn()));
 
             //if (@ldap_bind($this->getLdap(), $this->getBaseDn(), $this->password)) {
             if (true) {
-                /** @var \Tk\Event\Dispatcher $dispatcher */
-                $dispatcher = $this->getConfig()->getEventDispatcher();
-                if ($dispatcher) {
-                    $event = new \Tk\Event\AuthEvent($this);
-                    $dispatcher->dispatch(\Tk\Auth\AuthEvents::LOGIN_PROCESS, $event);
-                    if ($event->getResult()) {
-                        return $event->getResult();
-                    }
+                $this->dispatchLoginProcess();
+                if ($this->getLoginProcessEvent()->getResult()) {
+                    return $this->getLoginProcessEvent()->getResult();
                 }
                 return new Result(Result::SUCCESS, $this->username);
             }
@@ -114,6 +112,8 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $username = $this->uid;
         $uid = $this->uid;
         $email = $this->username . '@student.unimelb.edu.au';
+        $role = 'student';
+        $role = 'staff';
 
         $json = <<<JSON
 {
@@ -143,12 +143,12 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "3": "auedupersonlibrarybarcodenumber",
         "auedupersontype": {
             "count": 1,
-            "0": "student"
+            "0": "$role"
         },
         "4": "auedupersontype",
         "givenname": {
             "count": 1,
-            "0": "Shardul"
+            "0": "john"
         },
         "5": "givenname",
         "auedupersonsubtype": {
@@ -163,17 +163,17 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "7": "auedupersonid",
         "mailalternateaddress": {
             "count": 1,
-            "0": "$uid@student.unimelb.edu.au"
+            "0": "$username@$role.unimelb.edu.au"
         },
         "8": "mailalternateaddress",
         "displayname": {
             "count": 1,
-            "0": "Shardul Shailendra Chavan"
+            "0": "John Doe"
         },
         "9": "displayname",
         "uid": {
             "count": 1,
-            "0": "$username"
+            "0": "$uid"
         },
         "10": "uid",
         "auedupersonsharedtoken": {
@@ -236,7 +236,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "18": "objectclass",
         "cn": {
             "count": 1,
-            "0": "Shardul Shailendra Chavan"
+            "0": "John Doe"
         },
         "19": "cn",
         "orclsourcecreatetimestamp": {
@@ -251,12 +251,12 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "21": "orclsourcemodifytimestamp",
         "sn": {
             "count": 1,
-            "0": "Chavan"
+            "0": "John"
         },
         "22": "sn",
         "gecos": {
             "count": 1,
-            "0": "Shardul Shailendra Chavan"
+            "0": "John Doe"
         },
         "23": "gecos",
         "ismemberof": {
