@@ -133,7 +133,7 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
         $template = parent::show();
         
         // Render the form
-        $template->insertTemplate($this->form->getId(), $this->form->getRenderer()->show());
+        $template->appendTemplate('form', $this->form->getRenderer()->show());
 
         return $template;
     }
@@ -146,14 +146,10 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div var="content">
+<div>
+
+  <div class="tk-panel" data-panel-title="LDAP Settings" data-panel-icon="fa fa-cog" var="form"></div>
   
-  <div class="panel panel-default">
-    <div class="panel-heading"><i class="fa fa-cog"></i> LDAP Settings</div>
-    <div class="panel-body">
-      <div var="formEdit"></div>
-    </div>
-  </div>
 </div>
 XHTML;
 

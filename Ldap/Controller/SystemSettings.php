@@ -106,7 +106,7 @@ class SystemSettings extends \Bs\Controller\AdminIface
         $template = parent::show();
         
         // Render the form
-        $template->insertTemplate($this->form->getId(), $this->form->getRenderer()->show());
+        $template->appendTemplate('form', $this->form->getRenderer()->show());
 
         return $template;
     }
@@ -119,22 +119,10 @@ class SystemSettings extends \Bs\Controller\AdminIface
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div var="content">
+<div>
 
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cogs fa-fw"></i> Actions</div>
-      <div class="panel-body " var="action-panel">
-        <a href="javascript: window.history.back();" class="btn btn-default"><i class="fa fa-arrow-left"></i> <span>Back</span></a>
-      </div>
-    </div>
-    
-    <div class="panel panel-default">
-      <div class="panel-heading"><i class="fa fa-cog"></i> LDAP Settings</div>
-      <div class="panel-body">
-        <div var="formEdit"></div>
-      </div>
-    </div>
-    
+  <div class="tk-panel" data-panel-title="LDAP Settings" data-panel-icon="fa fa-cogs" var="form"></div>
+      
 </div>
 XHTML;
 
