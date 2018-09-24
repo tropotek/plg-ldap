@@ -168,7 +168,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "8": "mailalternateaddress",
         "displayname": {
             "count": 1,
-            "0": "John Doe"
+            "0": "John Fred Jane Doe"
         },
         "9": "displayname",
         "uid": {
