@@ -114,6 +114,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $email = $this->username . '@student.unimelb.edu.au';
         $role = 'student';
         $role = 'staff';
+        //$role = 'lecturer';
 
         $json = <<<JSON
 {
