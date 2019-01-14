@@ -20,11 +20,20 @@ class SetupHandler implements Subscriber
     {
         $config = \App\Config::getInstance();
         $institution = $config->getInstitution();
-        if (!$institution && $event->getRequest()->has('instHash')) {
-            $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
+
+
+        if (!$institution) {
+            if ($event->getRequest()->has('instHash')) {
+                $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
+            }
+            if ($event->getRequest()->getAttribute('institutionId')) {
+                /** @var \Uni\Db\Institution $inst */
+                $institution = $config->getInstitutionMapper()->find($event->getRequest()->getAttribute('institutionId'));
+            }
             $config->set('institution', $institution);
-            //$config->setInstitution($institution);
         }
+        vd($institution);
+
         if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
             $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
