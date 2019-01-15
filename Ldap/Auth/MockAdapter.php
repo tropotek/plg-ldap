@@ -211,7 +211,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "16": "orclopenldapentryuuid",
         "orclsourceobjectdn": {
             "count": 1,
-            "0": "uid=schavan,ou=people,o=unimelb"
+            "0": "uid=$username,ou=people,o=unimelb"
         },
         "17": "orclsourceobjectdn",
         "objectclass": {
