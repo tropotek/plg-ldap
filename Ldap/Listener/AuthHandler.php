@@ -21,7 +21,6 @@ class AuthHandler implements Subscriber
      */
     public function onLogin(AuthEvent $event)
     {
-vd('LdapAuthHandler::onLogin()');
         $result = null;
         $formData = $event->all();
 
