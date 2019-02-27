@@ -135,10 +135,11 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * Get the settings URL, if null then there is none
      *
-     * @param $zoneName
+     * @param string $zoneName
+     * @param string $zoneId
      * @return string|\Tk\Uri|null
      */
-    public function getZoneSettingsUrl($zoneName)
+    public function getZoneSettingsUrl($zoneName, $zoneId)
     {
         switch ($zoneName) {
             case self::ZONE_INSTITUTION:
