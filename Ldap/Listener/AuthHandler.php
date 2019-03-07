@@ -80,7 +80,7 @@ class AuthHandler implements Subscriber
 
         $event->getTable()->appendCell(new \Tk\Table\Cell\Text('ldap'))->setLabel('LDAP')
             ->setOnPropertyValue(function ($cell, $obj, $val) {
-                $u = '';
+                $u = $obj->username;
                 if ($obj->email) {
                     list($u, $d) = explode('@', $obj->email);
                 }

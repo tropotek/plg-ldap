@@ -37,8 +37,8 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
     protected $ldap = null;
 
     protected $username = '';
-    protected  $password = '';
-    protected  $uid = '';
+    protected $password = '';
+    protected $uid = '';
 
 
     /**
@@ -67,6 +67,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $this->password = $this->get('password');
 
         if (preg_match('/([a-z0-9\._]+)-([0-9]+)/', $this->username, $regs)) {
+            vd($regs);
             $this->username = $regs[1];
             $this->uid = $regs[2];
         } else {
@@ -113,7 +114,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $uid = $this->uid;
         $email = $this->username . '@student.unimelb.edu.au';
         $role = 'student';
-        $role = 'staff';
+        //$role = 'staff';
         //$role = 'lecturer';
 
         $json = <<<JSON
