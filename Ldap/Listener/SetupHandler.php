@@ -3,6 +3,7 @@ namespace Ldap\Listener;
 
 use Tk\Event\Subscriber;
 use Ldap\Plugin;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>
@@ -13,10 +14,10 @@ class SetupHandler implements Subscriber
 {
 
     /**
-     * @param \Tk\Event\GetResponseEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
      * @throws \Exception
      */
-    public function onRequest(\Tk\Event\GetResponseEvent $event)
+    public function onRequest(\Symfony\Component\HttpKernel\Event\RequestEvent $event)
     {
         $config = \App\Config::getInstance();
         $institution = $config->getInstitution();
@@ -38,19 +39,6 @@ class SetupHandler implements Subscriber
         }
     }
 
-
-
-
-    public function onInit(\Tk\Event\KernelEvent $event)
-    {
-        //vd('onInit');
-    }
-
-    public function onController(\Tk\Event\ControllerEvent $event)
-    {
-        //vd('onController');
-    }
-    
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -75,9 +63,7 @@ class SetupHandler implements Subscriber
     public static function getSubscribedEvents()
     {
         return array(
-            //\Tk\Kernel\KernelEvents::INIT => array('onInit', 0),
-            //\Tk\Kernel\KernelEvents::CONTROLLER => array('onController', 0),
-            \Tk\Kernel\KernelEvents::REQUEST => array('onRequest', -10)
+            KernelEvents::REQUEST => array('onRequest', -10)
         );
     }
     
