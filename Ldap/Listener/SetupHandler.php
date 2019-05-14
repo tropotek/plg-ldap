@@ -17,7 +17,7 @@ class SetupHandler implements Subscriber
      * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
      * @throws \Exception
      */
-    public function onRequest(\Symfony\Component\HttpKernel\Event\RequestEvent $event)
+    public function onRequest($event)
     {
         $config = \App\Config::getInstance();
         $institution = $config->getInstitution();
