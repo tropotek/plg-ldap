@@ -8,19 +8,13 @@ use Tk\Form\Field;
 use Ldap\Plugin;
 
 /**
- * Class Contact
- *
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
-class InstitutionSettings extends \Bs\Controller\AdminIface
+class InstitutionSettings extends \Bs\Controller\AdminEditIface
 {
 
-    /**
-     * @var Form
-     */
-    protected $form = null;
 
     /**
      * @var \Uni\Db\Institution
@@ -45,7 +39,6 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
      * doDefault
      *
      * @param Request $request
-     * @throws Form\Exception
      * @throws \Exception
      */
     public function doDefault(Request $request)
@@ -54,23 +47,23 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
         $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->get('zoneId'));
         $this->data = Plugin::getInstitutionData($this->institution);
 
-        $this->form = $this->getConfig()->createForm('formEdit');
-        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
+        $this->setForm($this->getConfig()->createForm('formEdit'));
+        $this->getForm()->setRenderer($this->getConfig()->createFormRenderer($this->getForm()));
 
-        $this->form->addField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')
+        $this->getForm()->appendField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')
             ->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
-        $this->form->addField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host')
+        $this->getForm()->appendField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host')
             ->setNotes('EG: ldaps://server.unimelb.edu.au');
-        $this->form->addField(new Field\Input(Plugin::LDAP_PORT))->setLabel('LDAP Port')->setValue('636');
-        $this->form->addField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')
+        $this->getForm()->appendField(new Field\Input(Plugin::LDAP_PORT))->setLabel('LDAP Port')->setValue('636');
+        $this->getForm()->appendField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')
             ->setNotes('Base DN query. EG: `uid=%s,ou=people,o=organization`.');
 
-        $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
+        $this->getForm()->appendField(new Event\Submit('update', array($this, 'doSubmit')));
+        $this->getForm()->appendField(new Event\Submit('save', array($this, 'doSubmit')));
+        $this->getForm()->appendField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
 
-        $this->form->load($this->data->toArray());
-        $this->form->execute();
+        $this->getForm()->load($this->data->toArray());
+        $this->getForm()->execute();
 
     }
 
@@ -110,7 +103,7 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
             }
         }
 
-        if ($this->form->hasErrors()) {
+        if ($form->hasErrors()) {
             return;
         }
         
@@ -133,7 +126,7 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
         $template = parent::show();
         
         // Render the form
-        $template->appendTemplate('form', $this->form->getRenderer()->show());
+        $template->appendTemplate('panel', $this->getForm()->getRenderer()->show());
 
         return $template;
     }
@@ -146,11 +139,7 @@ class InstitutionSettings extends \Bs\Controller\AdminIface
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div>
-
-  <div class="tk-panel" data-panel-title="LDAP Settings" data-panel-icon="fa fa-cog" var="form"></div>
-  
-</div>
+<div class="tk-panel" data-panel-title="LDAP Settings" data-panel-icon="fa fa-cog" var="panel"></div>
 XHTML;
 
         return \Dom\Loader::load($xhtml);

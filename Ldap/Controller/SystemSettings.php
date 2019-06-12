@@ -14,13 +14,8 @@ use Ldap\Plugin;
  * @license Copyright 2015 Michael Mifsud
  * @deprecated Not implemented...
  */
-class SystemSettings extends \Bs\Controller\AdminIface
+class SystemSettings extends \Bs\Controller\AdminEditIface
 {
-
-    /**
-     * @var Form
-     */
-    protected $form = null;
 
     /**
      * @var \Tk\Db\Data|null
@@ -45,24 +40,21 @@ class SystemSettings extends \Bs\Controller\AdminIface
      * doDefault
      *
      * @param Request $request
-     * @throws Form\Exception
      * @throws \Exception
      */
     public function doDefault(Request $request)
     {
-        $this->form = $this->getConfig()->createForm('formEdit');
-        $this->form->setRenderer($this->getConfig()->createFormRenderer($this->form));
+        $this->setForm($this->getConfig()->createForm('formEdit'));
+        $this->getForm()->setRenderer($this->getConfig()->createFormRenderer($this->getForm()));
 
-        $this->form->addField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
-        $this->form->addField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
-        
-        $this->form->addField(new Event\Submit('update', array($this, 'doSubmit')));
-        $this->form->addField(new Event\Submit('save', array($this, 'doSubmit')));
-        $this->form->addField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
+        $this->getForm()->appendField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
+        $this->getForm()->appendField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
+        $this->getForm()->appendField(new Event\Submit('update', array($this, 'doSubmit')));
+        $this->getForm()->appendField(new Event\Submit('save', array($this, 'doSubmit')));
+        $this->getForm()->appendField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
 
-        $this->form->load($this->data->toArray());
-        $this->form->execute();
-
+        $this->getForm()->load($this->data->toArray());
+        $this->getForm()->execute();
     }
 
     /**
@@ -83,7 +75,7 @@ class SystemSettings extends \Bs\Controller\AdminIface
             $form->addFieldError('plugin.email', 'Please enter a valid email address');
         }
         
-        if ($this->form->hasErrors()) {
+        if ($form->hasErrors()) {
             return;
         }
         
@@ -106,7 +98,7 @@ class SystemSettings extends \Bs\Controller\AdminIface
         $template = parent::show();
         
         // Render the form
-        $template->appendTemplate('form', $this->form->getRenderer()->show());
+        $template->appendTemplate('panel', $this->getForm()->getRenderer()->show());
 
         return $template;
     }
@@ -119,11 +111,7 @@ class SystemSettings extends \Bs\Controller\AdminIface
     public function __makeTemplate()
     {
         $xhtml = <<<XHTML
-<div>
-
-  <div class="tk-panel" data-panel-title="LDAP Settings" data-panel-icon="fa fa-cogs" var="form"></div>
-      
-</div>
+<div class="tk-panel" data-panel-title="LDAP Settings" data-panel-icon="fa fa-cogs" var="panel"></div>
 XHTML;
 
         return \Dom\Loader::load($xhtml);
