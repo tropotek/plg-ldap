@@ -389,3 +389,69 @@ JSON;
     }
 
 }
+
+/*
+[0] => Array
+(
+    [auedupersonemailaddress] => michael.mifsud@unimelb.edu.au
+    [auedupersonid] => 099619
+    [auedupersonsalutation] => MR
+    [auedupersontype] => staff
+    [aueduunitname] => 2540
+    [cn] => Mick Mifsud
+    [department] => Veterinary and Agricultural Sciences
+    [departmentnumber] => Array
+        (
+            [0] => 254H
+            [1] => 2540
+        )
+
+    [displayname] => Mick Mifsud
+    [dn] => uid=mifsudm,ou=people,o=unimelb
+    [employeenumber] => 099619
+    [employeetype] => FT
+    [gecos] => Mick Mifsud
+    [gidnumber] => 10000
+    [givenname] => Mick
+    [homedirectory] => /afs/athena.unimelb.edu.au/user/m/mifsudm
+    [ismemberof] => cn=Staff,ou=StudentPortal,ou=appgroups,ou=groups,o=unimelb
+    [mail] => michael.mifsud@unimelb.edu.au
+    [mailalternateaddress] => mifsudm@unimelb.edu.au
+    [milleniumid] => 099619
+    [objectclass] => Array
+        (
+            [0] => UoMPerson
+            [1] => shadowAccount
+            [2] => posixGroup
+            [3] => radiusprofile
+            [4] => posixAccount
+            [5] => unimelbPerson
+            [6] => eduMember
+            [7] => orclOpenLdapObject
+            [8] => oblixorgperson
+            [9] => person
+            [10] => oblixPersonPwdPolicy
+            [11] => organizationalPerson
+            [12] => inetOrgPerson
+            [13] => auEduPerson
+            [14] => sunFMSAML2NameIdentifier
+            [15] => top
+            [16] => eduPerson
+        )
+
+    [oblockouttime] => 0
+    [oblogintrycount] => 0
+    [obpasswordchangeflag] => false
+    [orclopenldapentryuuid] => d726a0ec-d0cc-1031-9f0c-b1181d9d8211
+    [orclsourcecreatetimestamp] => 20121202130633Z
+    [orclsourcemodifytimestamp] => 20170808214935Z
+    [orclsourceobjectdn] => uid=mifsudm,ou=people,o=unimelb
+    [ou] => Veterinary and Agricultural Sciences
+    [sn] => Mifsud
+    [sun-fm-saml2-nameid-info] => https://sso.its.unimelb.edu.au/sso/google|google.com|mifsudm|https://sso.its.unimelb.edu.au/sso/google|urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified|null|null|IDPRole|false
+    [sun-fm-saml2-nameid-infokey] => https://sso.its.unimelb.edu.au/sso/google|google.com|mifsudm
+    [uid] => mifsudm
+    [uidnumber] => 167020
+    [userpassword] => {SSHA512}RbZ8EkhiXSXDi23GrmXpMfY...
+)
+*/
