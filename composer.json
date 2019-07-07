@@ -8,9 +8,9 @@
         "EMS III",
         "ldap"
     ],
-    "time": "2019-04-09",
+    "time": "2019-07-08",
     "license": "MIT",
-    "version": "3.0.0",
+    "version": "3.0.8",
     "access": "institution",
     "authors":  [
          {
