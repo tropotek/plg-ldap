@@ -13,7 +13,7 @@ class Plugin extends \Tk\Plugin\Iface
 {
 
     const ZONE_INSTITUTION = 'institution';
-    const ZONE_SUBJECT_PROFILE = 'profile';
+    const ZONE_COURSE = 'course';
     const ZONE_SUBJECT = 'subject';
 
     // data labels
