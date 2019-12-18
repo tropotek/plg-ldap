@@ -3,6 +3,7 @@ namespace Ldap\Listener;
 
 use Ldap\Plugin;
 use Tk\Auth\AuthEvents;
+use Tk\ConfigTrait;
 use Tk\Event\AuthEvent;
 use Tk\Event\Subscriber;
 
@@ -13,6 +14,7 @@ use Tk\Event\Subscriber;
  */
 class AuthHandler implements Subscriber
 {
+    use ConfigTrait;
 
     /**
      * @param AuthEvent $event
@@ -116,14 +118,4 @@ class AuthHandler implements Subscriber
             \Tk\Table\TableEvents::TABLE_INIT => array('onMockAdapter', 0)
         );
     }
-
-
-    /**
-     * @return \App\Config
-     */
-    public function getConfig()
-    {
-        return \App\Config::getInstance();
-    }
-    
 }
