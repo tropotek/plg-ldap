@@ -1,9 +1,9 @@
 <?php
 namespace Ldap\Listener;
 
-use Tk\Event\Subscriber;
 use Ldap\Plugin;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Tk\Event\Subscriber;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>

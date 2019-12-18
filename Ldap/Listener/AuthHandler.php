@@ -1,10 +1,10 @@
 <?php
 namespace Ldap\Listener;
 
-use Tk\Event\Subscriber;
-use Tk\Event\AuthEvent;
-use Tk\Auth\AuthEvents;
 use Ldap\Plugin;
+use Tk\Auth\AuthEvents;
+use Tk\Event\AuthEvent;
+use Tk\Event\Subscriber;
 
 /**
  * @author Michael Mifsud <info@tropotek.com>

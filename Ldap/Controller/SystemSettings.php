@@ -1,11 +1,11 @@
 <?php
 namespace Ldap\Controller;
 
-use Tk\Request;
+use Ldap\Plugin;
 use Tk\Form;
 use Tk\Form\Event;
 use Tk\Form\Field;
-use Ldap\Plugin;
+use Tk\Request;
 
 
 /**
