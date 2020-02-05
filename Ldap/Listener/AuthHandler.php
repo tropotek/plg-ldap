@@ -81,7 +81,7 @@ class AuthHandler implements Subscriber
         if (!in_array('tk-pending-users', $event->getTable()->getCssList())) return;
 
         $event->getTable()->appendCell(new \Tk\Table\Cell\Text('ldap'))->setLabel('LDAP')
-            ->setOnPropertyValue(function ($cell, $obj, $val) {
+            ->addOnPropertyValue(function ($cell, $obj, $val) {
                 $u = $obj->username;
                 if ($obj->email) {
                     list($u, $d) = explode('@', $obj->email);
