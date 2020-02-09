@@ -71,6 +71,8 @@ class AuthHandler implements Subscriber
     }
 
     /**
+     * Add cell for Pending-user table when using Mock-adapter
+     *
      * @param \Tk\Event\TableEvent $event
      * @return null|void
      * @throws \Exception
