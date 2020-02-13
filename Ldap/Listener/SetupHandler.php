@@ -26,9 +26,9 @@ class SetupHandler implements Subscriber
             if ($event->getRequest()->has('instHash')) {
                 $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
             }
-            if ($event->getRequest()->attribute->get('institutionId')) {
+            if ($event->getRequest()->attributes->get('institutionId')) {
                 /** @var \Uni\Db\Institution $inst */
-                $institution = $config->getInstitutionMapper()->find($event->getRequest()->attribute->get('institutionId'));
+                $institution = $config->getInstitutionMapper()->find($event->getRequest()->attributes->get('institutionId'));
             }
             $config->set('institution', $institution);
         }
