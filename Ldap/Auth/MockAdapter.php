@@ -113,9 +113,9 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $username = $this->uid;
         $uid = $this->uid;
         $email = $this->username . '@student.unimelb.edu.au';
-        $role = 'student';
-        //$role = 'staff';
-        //$role = 'lecturer';
+        $type = 'student';
+        //$type = 'staff';
+        //$type = 'lecturer';
 
         $json = <<<JSON
 {
@@ -145,7 +145,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "3": "auedupersonlibrarybarcodenumber",
         "auedupersontype": {
             "count": 1,
-            "0": "$role"
+            "0": "$type"
         },
         "4": "auedupersontype",
         "givenname": {
@@ -165,7 +165,7 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         "7": "auedupersonid",
         "mailalternateaddress": {
             "count": 1,
-            "0": "$username@$role.unimelb.edu.au"
+            "0": "$username@$type.unimelb.edu.au"
         },
         "8": "mailalternateaddress",
         "displayname": {
