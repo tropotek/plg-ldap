@@ -10,6 +10,15 @@ use Tk\Auth\Result;
 
 /**
  * For Debug use only
+ *
+ * Update your config.php to use:
+ *
+ *    $config->set('ldap.adapter.mock', true);
+ *
+ *  Then to login use the username and anything for a password
+ *
+ *
+ *
  */
 class MockAdapter extends \Tk\Auth\Adapter\Ldap
 {
@@ -67,7 +76,6 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $this->password = $this->get('password');
 
         if (preg_match('/([a-z0-9\._]+)-([0-9]+)/', $this->username, $regs)) {
-            vd($regs);
             $this->username = $regs[1];
             $this->uid = $regs[2];
         } else {

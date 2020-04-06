@@ -89,17 +89,18 @@ class InstitutionSettings extends \Bs\Controller\AdminEditIface
             if (empty($values[Plugin::LDAP_BASE_DN])) {
                 $form->addFieldError(Plugin::LDAP_BASE_DN, 'Enter a valid base DN query');
             }
-
-            try {
-                $ldap = @ldap_connect($values[Plugin::LDAP_HOST], $values[Plugin::LDAP_PORT]);
-                if ($ldap === false) {
-                    $form->addError('Cannot connect to LDAP host');
+            if (!$this->getConfig()->get('ldap.adapter.mock') || !$this->getConfig()->isDebug()) {
+                try {
+                    $ldap = @ldap_connect($values[Plugin::LDAP_HOST], $values[Plugin::LDAP_PORT]);
+                    if ($ldap === false) {
+                        $form->addError('Cannot connect to LDAP host');
+                    }
+                    if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
+                        $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError($e->getMessage());
                 }
-                if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
-                    $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');
-                }
-            } catch (\Exception $e) {
-                $form->addError($e->getMessage());
             }
         }
 
