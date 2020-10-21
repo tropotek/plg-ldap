@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 3.0.24 [2020-10-21]:
+-------------------------------
+  - Tagging and releasing branch `3.0` with version `3.0.22`.
+  - Tagging and releasing branch `M	Ldap/Auth/MockAdapter.php` with version `3.0.20`.
+
+
 Ver 3.0.22 [2020-04-06]:
 -------------------------------
   - Tagging and releasing branch `M	Ldap/Auth/MockAdapter.php` with version `3.0.20`.
