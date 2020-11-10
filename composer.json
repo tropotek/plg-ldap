@@ -1,32 +1,32 @@
 {
-    "name": "ttek-plg/plg-ldap",
-    "type": "ttek-plugin",
-    "description": "LDAP Plugin for the tk-uni lib",
-    "keywords":  [
-        "tropotek",
-        "plugin",
-        "EMS III",
-        "ldap"
-    ],
-    "time": "2020-11-11",
-    "license": "MIT",
-    "authors":  [
-         {
-            "name": "Michael Mifsud",
-            "homepage": "http://www.tropotek.com/"
-        }
-    ],
-    "autoload":  {
-        "psr-0":  {
-            "Ldap\\": ""
-        }
-    },
-    "require":  {
-        "php": "^7.3.0"
-    },
-    "extra":  {
-        "branch-alias":  {
-            "dev-master": "3.2.x-dev"
-        }
+  "name": "ttek-plg/plg-ldap",
+  "type": "ttek-plugin",
+  "description": "LDAP Plugin for the tk-uni lib",
+  "keywords": [
+    "tropotek",
+    "plugin",
+    "EMS III",
+    "ldap"
+  ],
+  "time": "2019-04-09",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michael Mifsud",
+      "homepage": "http://www.tropotek.com/"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Ldap\\": ""
+    }
+  },
+  "require": {
+    "php": "^7.3.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.2.x-dev"
+    }
+  }
 }
