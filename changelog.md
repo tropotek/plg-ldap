@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 3.2.6 [2020-11-23]:
+-------------------------------
+  - Tagging and releasing branch `3.2` with version `3.2.2`.
+  - Tagging and releasing branch `3.2` with version `3.2.0`.
+
+
 Ver 3.2.2 [2020-11-11]:
 -------------------------------
 
