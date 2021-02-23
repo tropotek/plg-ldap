@@ -67,7 +67,7 @@ class AuthHandler implements Subscriber
         $result = $auth->authenticate($adapter);
 
         $event->setResult($result);
-        $event->set('auth.password.access', false);   // Can modify their own password
+        $event->set('auth.password.access', false);   // Can user modify their own password?
 
     }
 
