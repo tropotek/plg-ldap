@@ -1,5 +1,10 @@
 #CHANGELOG#
 
+Ver 3.2.12 [2022-03-03]:
+-------------------------------
+  - Tagging and releasing branch `master` with version `3.2.4`.
+
+
 Ver 3.2.8 [2021-02-24]:
 -------------------------------
 
