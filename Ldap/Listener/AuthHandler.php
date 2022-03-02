@@ -38,7 +38,8 @@ class AuthHandler implements Subscriber
         //  so this can stay here for now as we will only be using LDAP in an institution environment.
 
         $institution = $this->getConfig()->getInstitution();
-        if (empty($formData['username']) || !$institution || !Plugin::isEnabled($institution)) return;
+        // TODO: find a better way to ignore the xlogin.html page
+        if (empty($formData['username']) || !$institution || !Plugin::isEnabled($institution) || \Tk\Uri::create()->basename() == 'xlogin.html') return;
 
         $data = Plugin::getInstitutionData($institution);
 
@@ -66,7 +67,7 @@ class AuthHandler implements Subscriber
         $result = $auth->authenticate($adapter);
 
         $event->setResult($result);
-        $event->set('auth.password.access', false);   // Can modify their own password
+        $event->set('auth.password.access', false);   // Can user modify their own password?
 
     }
 

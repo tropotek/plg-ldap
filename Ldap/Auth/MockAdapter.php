@@ -70,6 +70,11 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
             vd($regs);
             $this->username = $regs[1];
             $this->uid = $regs[2];
+            if ($this->uid) {
+                $user = $this->getConfig()->getUserMapper()->findFiltered(['institutionId' => $this->getConfig()->getInstitutionId(), 'uid' => $this->uid])->current();
+                if ($user)
+                    $this->username = $user->getUsername();
+            }
         } else {
             $this->set('username', $this->username);
             //throw new \Tk\Exception('LdapMock: Server Error: Please contact system administrator.');
