@@ -1,6 +1,6 @@
 {
-  "name": "ttek-plg/plg-ldap",
-  "type": "ttek-plugin",
+  "name": "uom-plg/plg-ldap",
+  "type": "uom-plugin",
   "description": "LDAP Plugin for the tk-uni lib",
   "keywords": [
     "tropotek",
