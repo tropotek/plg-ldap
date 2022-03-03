@@ -26,7 +26,7 @@ Or add the following to your composer.json file:
 
 ```json
 {
-  "uom-plg/plg-ldap": "~1.0"
+  "uom-plg/plg-ldap": "~3.4"
 }
 ```
 
