@@ -96,7 +96,7 @@ class Plugin extends \Tk\Plugin\Iface
     {
         include dirname(__FILE__) . '/config.php';
 
-        if ($this->getConfig()->get('institution')) {
+        if (self::isUniLib()) {
             $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
         }
 
@@ -132,7 +132,8 @@ class Plugin extends \Tk\Plugin\Iface
     {
         $db = \App\Config::getInstance()->getDb();
         // Clear the data table of all plugin data
-        $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('fkey'),
+        $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s',
+            $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('fkey'),
             $db->quote($this->getName().'%'));
         $db->query($sql);
     }
