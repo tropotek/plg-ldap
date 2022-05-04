@@ -12,7 +12,6 @@ use Tk\Request;
  * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
- * @deprecated Not implemented...
  */
 class SystemSettings extends \Bs\Controller\AdminEditIface
 {
@@ -44,11 +43,19 @@ class SystemSettings extends \Bs\Controller\AdminEditIface
      */
     public function doDefault(Request $request)
     {
+        $this->data = Plugin::getPluginData();
+
         $this->setForm($this->getConfig()->createForm('formEdit'));
         $this->getForm()->setRenderer($this->getConfig()->createFormRenderer($this->getForm()));
 
-        $this->getForm()->appendField(new Field\Input('plugin.title'))->setLabel('Site Title')->setRequired(true);
-        $this->getForm()->appendField(new Field\Input('plugin.email'))->setLabel('Site Email')->setRequired(true);
+        $this->getForm()->appendField(new Field\Checkbox(Plugin::LDAP_ENABLE))->addCss('tk-input-toggle')
+            ->setLabel('Enable LDAP')->setNotes('Enable LDAP authentication for the institution staff and student login.');
+        $this->getForm()->appendField(new Field\Input(Plugin::LDAP_HOST))->setLabel('LDAP Host')
+            ->setNotes('EG: ldaps://server.unimelb.edu.au');
+        $this->getForm()->appendField(new Field\Input(Plugin::LDAP_PORT))->setLabel('LDAP Port')->setValue('636');
+        $this->getForm()->appendField(new Field\Input(Plugin::LDAP_BASE_DN))->setLabel('LDAP Base DN')
+            ->setNotes('Base DN query. EG: `uid=%s,ou=people,o=organization`.');
+
         $this->getForm()->appendField(new Event\Submit('update', array($this, 'doSubmit')));
         $this->getForm()->appendField(new Event\Submit('save', array($this, 'doSubmit')));
         $this->getForm()->appendField(new Event\LinkButton('cancel', $this->getConfig()->getSession()->getBackUrl()));
@@ -61,31 +68,51 @@ class SystemSettings extends \Bs\Controller\AdminEditIface
      * doSubmit()
      *
      * @param Form $form
-     * @throws \Exception
+     * @param \Tk\Form\Event\Iface $event
+     * @throws \Tk\Db\Exception
      */
-    public function doSubmit($form)
+    public function doSubmit($form, $event)
     {
         $values = $form->getValues();
         $this->data->replace($values);
-        
-        if (empty($values['plugin.title']) || strlen($values['plugin.title']) < 3) {
-            $form->addFieldError('plugin.title', 'Please enter your name');
+
+        if ($values[Plugin::LDAP_ENABLE]) {
+            if (empty($values[Plugin::LDAP_HOST]) || !filter_var($values[Plugin::LDAP_HOST], \FILTER_VALIDATE_URL)) {
+                $form->addFieldError(Plugin::LDAP_HOST, 'Please enter a valid LDAP host');
+            }
+            if (empty($values[Plugin::LDAP_PORT]) || !is_numeric($values[Plugin::LDAP_PORT])) {
+                $form->addFieldError(Plugin::LDAP_PORT, 'Please enter a valid LDAP port. [TLS: 389, SSL: 636]');
+            }
+            if (empty($values[Plugin::LDAP_BASE_DN])) {
+                $form->addFieldError(Plugin::LDAP_BASE_DN, 'Enter a valid base DN query');
+            }
+
+            if (!$this->getConfig()->isDebug()) {
+                try {
+                    $ldap = @ldap_connect($values[Plugin::LDAP_HOST], $values[Plugin::LDAP_PORT]);
+                    if ($ldap === false) {
+                        $form->addError('Cannot connect to LDAP host');
+                    }
+                    if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
+                        $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError($e->getMessage());
+                }
+            }
         }
-        if (empty($values['plugin.email']) || !filter_var($values['plugin.email'], \FILTER_VALIDATE_EMAIL)) {
-            $form->addFieldError('plugin.email', 'Please enter a valid email address');
-        }
-        
+
         if ($form->hasErrors()) {
             return;
         }
-        
+
         $this->data->save();
-        
-        \Tk\Alert::addSuccess('Site settings saved.');
-        if ($form->getTriggeredEvent()->getName() == 'update') {
-            $this->getConfig()->getSession()->getBackUrl()->redirect();
+
+        \Tk\Alert::addSuccess('LDAP Settings saved.');
+        $event->setRedirect($this->getConfig()->getBackUrl());
+        if ($form->getTriggeredEvent()->getName() == 'save') {
+            $event->setRedirect(\Tk\Uri::create());
         }
-        \Tk\Uri::create()->redirect();
     }
 
     /**

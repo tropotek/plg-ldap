@@ -23,7 +23,6 @@ class AuthHandler implements Subscriber
      */
     public function onLogin(AuthEvent $event)
     {
-        $result = null;
         $formData = $event->all();
 
         // ---------------------------------------------------------------------------
@@ -37,16 +36,15 @@ class AuthHandler implements Subscriber
         // This plugin cannot be independent without removing the institution dependency
         //  so this can stay here for now as we will only be using LDAP in an institution environment.
 
-        $institution = $this->getConfig()->getInstitution();
         // TODO: find a better way to ignore the xlogin.html page
-        if (empty($formData['username']) || !$institution || !Plugin::isEnabled($institution) || \Tk\Uri::create()->basename() == 'xlogin.html') return;
+        if (empty($formData['username']) || !Plugin::isEnabled() || \Tk\Uri::create()->basename() == 'xlogin.html') return;
 
-        $data = Plugin::getInstitutionData($institution);
+        $data = Plugin::getPluginData();
 
         $hostUri = $data->get(Plugin::LDAP_HOST);
         $port = (int)$data->get(Plugin::LDAP_PORT);
         $baseDn =  $data->get(Plugin::LDAP_BASE_DN);
-        $data = Plugin::getInstitutionData($institution);
+        $data = Plugin::getPluginData();
         if (!$data->get(Plugin::LDAP_ENABLE)) {
             return;
         }
@@ -56,9 +54,9 @@ class AuthHandler implements Subscriber
         $event->stopPropagation();      // If LDAP enabled then no other auth method to be used in the login form.????
 
         $adapter = new \Tk\Auth\Adapter\Ldap($hostUri, $baseDn, $port);
-
-        // Use this to test the LDAP adaper and users
+        // Use this to test the LDAP Adapter and users
         if ($this->getConfig()->get('ldap.adapter.mock')) {
+            vd();
             \Tk\Log::info('!!! Mocking the LDAP adapter !!!');
             $adapter = new \Ldap\Auth\MockAdapter($hostUri, $baseDn, $port);
         }

@@ -2,6 +2,8 @@
 namespace Ldap;
 
 use Tk\Event\Dispatcher;
+use Tk\EventDispatcher\EventDispatcher;
+use Tk\Exception;
 
 
 /**
@@ -11,7 +13,6 @@ use Tk\Event\Dispatcher;
  */
 class Plugin extends \Tk\Plugin\Iface
 {
-
     const ZONE_INSTITUTION = 'institution';
     const ZONE_COURSE = 'course';
     const ZONE_SUBJECT = 'subject';
@@ -29,7 +30,7 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * @var \Tk\Db\Data
      */
-    public static $institutionData = null;
+    public static $pluginData = null;
 
 
     /**
@@ -41,20 +42,27 @@ class Plugin extends \Tk\Plugin\Iface
      */
     static function getInstance()
     {
-        return \Uni\Config::getInstance()->getPluginFactory()->getPlugin('plg-ldap');
+        return \App\Config::getInstance()->getPluginFactory()->getPlugin('plg-ldap');
     }
 
     /**
-     * @param \Uni\Db\Institution $institution
      * @return \Tk\Db\Data
      * @throws \Exception
+     * @todo: refactor without the institution object
      */
-    public static function getInstitutionData($institution)
+    public static function getPluginData()
     {
-        // TODO: this may not be the best position for this
-        \App\Config::getInstance()->set('institution', $institution);
-
-        return self::$institutionData = \Tk\Db\Data::create(self::getInstance()->getName() . '.institution', $institution->getId());
+        $fkey = self::getInstance()->getName() . '.admin';
+        $fid = 0;
+        if (self::isUniLib()) {
+            if (!is_object(\App\Config::getInstance()->get('institution'))) {
+                // TODO: if this gets thrown then we need to reconsider the construction of this object
+                throw new Exception('No institution object found?');
+            }
+            $fkey = self::getInstance()->getName() . '.institution';
+            $fid = \App\Config::getInstance()->get('institution')->getId();
+        }
+        return self::$pluginData = \Tk\Db\Data::create($fkey, $fid);
     }
 
     /**
@@ -64,9 +72,9 @@ class Plugin extends \Tk\Plugin\Iface
      * @return bool
      * @throws \Exception
      */
-    public static function isEnabled($institution)
+    public static function isEnabled()
     {
-        $data = self::getInstitutionData($institution);
+        $data = self::getPluginData();
         if ($data && $data->has(self::LDAP_ENABLE)) {
             return $data->get(self::LDAP_ENABLE);
         }
@@ -86,14 +94,14 @@ class Plugin extends \Tk\Plugin\Iface
      */
     function doInit()
     {
-        // TODO: Implement doInit() method.
         include dirname(__FILE__) . '/config.php';
-        /** @var \App\Config $config */
-        $config = $this->getConfig();
-        $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
 
-        /** @var Dispatcher $dispatcher */
-        $dispatcher = $config->getEventDispatcher();
+        if ($this->getConfig()->get('institution')) {
+            $this->getPluginFactory()->registerZonePlugin($this, self::ZONE_INSTITUTION);
+        }
+
+        /** @var EventDispatcher $dispatcher */
+        $dispatcher = $this->getConfig()->getEventDispatcher();
         $dispatcher->addSubscriber(new \Ldap\Listener\SetupHandler());
 
     }
@@ -108,8 +116,6 @@ class Plugin extends \Tk\Plugin\Iface
      */
     function doActivate()
     {
-        // TODO: Implement doActivate() method.
-
         // Init Settings
         $data = \Tk\Db\Data::create($this->getName());
         $data->save();
@@ -124,8 +130,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     function doDeactivate()
     {
-        $db = \Uni\Config::getInstance()->getDb();
-
+        $db = \App\Config::getInstance()->getDb();
         // Clear the data table of all plugin data
         $sql = sprintf('DELETE FROM %s WHERE %s LIKE %s', $db->quoteParameter(\Tk\Db\Data::$DB_TABLE), $db->quoteParameter('fkey'),
             $db->quote($this->getName().'%'));
@@ -141,6 +146,7 @@ class Plugin extends \Tk\Plugin\Iface
      */
     public function getZoneSettingsUrl($zoneName, $zoneId)
     {
+        if (!self::isUniLib()) return null;
         switch ($zoneName) {
             case self::ZONE_INSTITUTION:
                 return \Bs\Uri::createHomeUrl('/ldapInstitutionSettings.html');
@@ -148,4 +154,24 @@ class Plugin extends \Tk\Plugin\Iface
         return null;
     }
 
+    /**
+     * Return the URI of the plugin's configuration page
+     * Return null for none
+     *
+     * @return \Tk\Uri
+     */
+    public function getSettingsUrl()
+    {
+        if (self::isUniLib()) return null;
+        return \Bs\Uri::createHomeUrl('/ldapSettings.html');
+    }
+
+    /**
+     * Return true if the site is a tk-uni lib based site
+     * @return bool
+     */
+    public static function isUniLib()
+    {
+        return class_exists('Uni\Db\Institution');
+    }
 }

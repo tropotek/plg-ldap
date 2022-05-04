@@ -20,22 +20,26 @@ class SetupHandler implements Subscriber
     public function onRequest($event)
     {
         $config = \App\Config::getInstance();
-        $institution = $config->getInstitution();
 
-        if (!$institution) {
-            if ($event->getRequest()->has('instHash')) {
-                $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
+        if (Plugin::isUniLib()) {
+            $institution = $config->getInstitution();
+            if (!$institution) {
+                if ($event->getRequest()->has('instHash')) {
+                    $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
+                }
+                if ($event->getRequest()->attributes->get('institutionId')) {
+                    /** @var \Uni\Db\Institution $inst */
+                    $institution = $config->getInstitutionMapper()->find($event->getRequest()->attributes->get('institutionId'));
+                }
+                $config->set('institution', $institution);
             }
-            if ($event->getRequest()->attributes->get('institutionId')) {
-                /** @var \Uni\Db\Institution $inst */
-                $institution = $config->getInstitutionMapper()->find($event->getRequest()->attributes->get('institutionId'));
+            if ($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
+                $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandlerUnimelb());
             }
-            $config->set('institution', $institution);
-        }
-        //vd($institution);
-
-        if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
-            $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
+        } else {
+            if (Plugin::getInstance()->isActive()) {
+                $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
+            }
         }
     }
 

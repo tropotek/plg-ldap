@@ -45,7 +45,7 @@ class InstitutionSettings extends \Bs\Controller\AdminEditIface
     {
 
         $this->institution = $this->getConfig()->getInstitutionMapper()->find($request->get('zoneId'));
-        $this->data = Plugin::getInstitutionData($this->institution);
+        $this->data = Plugin::getPluginData();
 
         $this->setForm($this->getConfig()->createForm('formEdit'));
         $this->getForm()->setRenderer($this->getConfig()->createFormRenderer($this->getForm()));
@@ -90,16 +90,18 @@ class InstitutionSettings extends \Bs\Controller\AdminEditIface
                 $form->addFieldError(Plugin::LDAP_BASE_DN, 'Enter a valid base DN query');
             }
 
-            try {
-                $ldap = @ldap_connect($values[Plugin::LDAP_HOST], $values[Plugin::LDAP_PORT]);
-                if ($ldap === false) {
-                    $form->addError('Cannot connect to LDAP host');
+            if (!$this->getConfig()->isDebug()) {
+                try {
+                    $ldap = @ldap_connect($values[Plugin::LDAP_HOST], $values[Plugin::LDAP_PORT]);
+                    if ($ldap === false) {
+                        $form->addError('Cannot connect to LDAP host');
+                    }
+                    if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
+                        $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');
+                    }
+                } catch (\Exception $e) {
+                    $form->addError($e->getMessage());
                 }
-                if (!@ldap_bind($ldap)) {   // Still not error checking the connection correctly, but will do for now.
-                    $form->addError('Failed to bind to LDAP host, check your settings or contact your LDAP administrator.');
-                }
-            } catch (\Exception $e) {
-                $form->addError($e->getMessage());
             }
         }
 
