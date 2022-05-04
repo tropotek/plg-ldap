@@ -48,7 +48,6 @@ class Plugin extends \Tk\Plugin\Iface
     /**
      * @return \Tk\Db\Data
      * @throws \Exception
-     * @todo: refactor without the institution object
      */
     public static function getPluginData()
     {
