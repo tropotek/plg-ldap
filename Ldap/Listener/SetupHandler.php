@@ -32,7 +32,6 @@ class SetupHandler implements Subscriber
             }
             $config->set('institution', $institution);
         }
-        //vd($institution);
 
         if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
             $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());

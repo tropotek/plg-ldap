@@ -67,7 +67,6 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
         $this->password = $this->get('password');
 
         if (preg_match('/([a-z0-9\._]+)-([0-9]+)/', $this->username, $regs)) {
-            vd($regs);
             $this->username = $regs[1];
             $this->uid = $regs[2];
             if ($this->uid) {
