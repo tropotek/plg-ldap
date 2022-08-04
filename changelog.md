@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 3.4.4 [2022-08-05]:
+-------------------------------
+  - Tagging and releasing branch `3.2` with version `3.2.10`.
+  - Added AuthHandlerUnimelb
+
+
 Ver 3.4.2 [2022-08-03]:
 -------------------------------
   - removed comments
