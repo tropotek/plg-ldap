@@ -20,26 +20,21 @@ class SetupHandler implements Subscriber
     public function onRequest($event)
     {
         $config = \App\Config::getInstance();
+        $institution = $config->getInstitution();
 
-        if (Plugin::isUniLib()) {
-            $institution = $config->getInstitution();
-            if (!$institution) {
-                if ($event->getRequest()->has('instHash')) {
-                    $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
-                }
-                if ($event->getRequest()->attributes->get('institutionId')) {
-                    /** @var \Uni\Db\Institution $inst */
-                    $institution = $config->getInstitutionMapper()->find($event->getRequest()->attributes->get('institutionId'));
-                }
-                $config->set('institution', $institution);
+        if (!$institution) {
+            if ($event->getRequest()->has('instHash')) {
+                $institution = $config->getInstitutionMapper()->findByHash($event->getRequest()->get('instHash'));
             }
-            if ($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
-                $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandlerUnimelb());
+            if ($event->getRequest()->attributes->get('institutionId')) {
+                /** @var \Uni\Db\Institution $inst */
+                $institution = $config->getInstitutionMapper()->find($event->getRequest()->attributes->get('institutionId'));
             }
-        } else {
-            if (Plugin::getInstance()->isActive()) {
-                $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
-            }
+            $config->set('institution', $institution);
+        }
+
+        if($institution && Plugin::getInstance()->isZonePluginEnabled(Plugin::ZONE_INSTITUTION, $institution->getId())) {
+            $config->getEventDispatcher()->addSubscriber(new \Ldap\Listener\AuthHandler());
         }
     }
 

@@ -26,13 +26,12 @@ Or add the following to your composer.json file:
 
 ```json
 {
-  "ttek-plg/plg-ldap": "~1.0"
+  "ttek-plg/plg-ldap": "~3.4"
 }
 ```
 
 If you do not use Composer, you can grab the code from GitHub, and use any
-PSR-0 compatible autoloader (e.g. the [plg-ldap](https://github.com/tropotek/plg-ldap))
-to load the classes.
+PSR-0 compatible autoloader to load the classes.
 
 ## Introduction
 
