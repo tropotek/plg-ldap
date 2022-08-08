@@ -1,6 +1,6 @@
 # TODO
 
-__Project:__ [uom-plg/plg-ldap](http://packagist.org/packages/uom-plg/plg-ldap)  
+__Project:__ [ttek-plg/plg-ldap](http://packagist.org/packages/ttek-plg/plg-ldap)  
 __Published:__ 01 Sep 2016
 __Web:__ <http://www.tropotek.com/>  
 __Authors:__ Michael Mifsud <http://www.tropotek.com/>  
