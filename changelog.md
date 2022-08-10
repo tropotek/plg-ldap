@@ -1,5 +1,11 @@
 #CHANGELOG#
 
+Ver 3.4.8 [2022-08-11]:
+-------------------------------
+  - Merge branch '3.4' of ssh://github.com/tropotek/plg-ldap into 3.4
+  - Tagging and releasing branch `3.4` with version `3.4.6`.
+
+
 Ver 3.4.6 [2022-08-10]:
 -------------------------------
 
