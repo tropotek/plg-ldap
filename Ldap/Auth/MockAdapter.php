@@ -1,6 +1,6 @@
 <?php
 /*
- * @author Michael Mifsud <http://www.tropotek.com/>
+ * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2007 Michael Mifsud
  */
@@ -65,8 +65,9 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
     {
         $this->username = $this->get('username');
         $this->password = $this->get('password');
-
+        $user = null;
         if (preg_match('/([a-z0-9\._]+)-([0-9]+)/', $this->username, $regs)) {
+            vd($regs);
             $this->username = $regs[1];
             $this->uid = $regs[2];
             if ($this->uid) {
@@ -76,11 +77,12 @@ class MockAdapter extends \Tk\Auth\Adapter\Ldap
             }
         } else {
             $this->set('username', $this->username);
-            //throw new \Tk\Exception('LdapMock: Server Error: Please contact system administrator.');
+            $user = $this->getConfig()->getUserMapper()->findByUsername($this->username);
         }
         $this->set('username', $this->username);
 
-        if (!$this->username || !$this->password) {
+        //if (!$this->username || !$this->password) {
+        if (!$user) {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->username, '0000 Invalid username or password.');
         }
         try {

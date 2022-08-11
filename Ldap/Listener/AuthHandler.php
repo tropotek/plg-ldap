@@ -8,7 +8,7 @@ use Tk\Event\AuthEvent;
 use Tk\Event\Subscriber;
 
 /**
- * @author Michael Mifsud <http://www.tropotek.com/>
+ * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
@@ -56,7 +56,6 @@ class AuthHandler implements Subscriber
         $adapter = new \Tk\Auth\Adapter\Ldap($hostUri, $baseDn, $port);
         // Use this to test the LDAP Adapter and users
         if ($this->getConfig()->get('ldap.adapter.mock')) {
-            vd();
             \Tk\Log::info('!!! Mocking the LDAP adapter !!!');
             $adapter = new \Ldap\Auth\MockAdapter($hostUri, $baseDn, $port);
         }

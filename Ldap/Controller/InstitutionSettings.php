@@ -8,7 +8,7 @@ use Tk\Form\Field;
 use Tk\Request;
 
 /**
- * @author Michael Mifsud <http://www.tropotek.com/>
+ * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
@@ -108,7 +108,7 @@ class InstitutionSettings extends \Bs\Controller\AdminEditIface
         if ($form->hasErrors()) {
             return;
         }
-        
+
         $this->data->save();
 
         \Tk\Alert::addSuccess('LDAP Settings saved.');
@@ -126,7 +126,7 @@ class InstitutionSettings extends \Bs\Controller\AdminEditIface
     public function show()
     {
         $template = parent::show();
-        
+
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->getRenderer()->show());
 

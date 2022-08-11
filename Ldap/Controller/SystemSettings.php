@@ -9,7 +9,7 @@ use Tk\Request;
 
 
 /**
- * @author Michael Mifsud <http://www.tropotek.com/>
+ * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2015 Michael Mifsud
  */
@@ -123,7 +123,7 @@ class SystemSettings extends \Bs\Controller\AdminEditIface
     public function show()
     {
         $template = parent::show();
-        
+
         // Render the form
         $template->appendTemplate('panel', $this->getForm()->getRenderer()->show());
 

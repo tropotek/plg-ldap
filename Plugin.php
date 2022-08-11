@@ -7,7 +7,7 @@ use Tk\Exception;
 
 
 /**
- * @author Michael Mifsud <http://www.tropotek.com/>
+ * @author Michael Mifsud <info@tropotek.com>
  * @see http://www.tropotek.com/
  * @license Copyright 2016 Michael Mifsud
  */
@@ -82,8 +82,8 @@ class Plugin extends \Tk\Plugin\Iface
 
 
     // ---- \Tk\Plugin\Iface Interface Methods ----
-    
-    
+
+
     /**
      * Init the plugin
      *
